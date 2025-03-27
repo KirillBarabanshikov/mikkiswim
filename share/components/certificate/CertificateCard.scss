@@ -1,0 +1,144 @@
+@use '/app/assets/scss/variables' as *;
+
+.certificate {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  cursor: pointer;
+
+  &:hover {
+    .certificate-img {
+      padding: 0 20px;
+    }
+  }
+
+  &-img {
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 40px;
+    transition: all 0.3s ease;
+    aspect-ratio: 1 / 1.5;
+  }
+
+  &-body {
+    padding: 16px;
+  }
+
+  &-subtitle {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gray);
+    margin-bottom: 8px;
+  }
+
+  &-title {
+    margin: 0 0 10px;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  &-fav {
+    cursor: pointer;
+    color: var(--black);
+
+    &.active {
+      color: var(--red);
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &-price {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &-price-current {
+    font-size: 20px;
+  }
+
+  &-description {
+    margin-top: 8px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: $md1 + px) {
+  .certificate {
+    &-img {
+      padding: 0 30px;
+    }
+  }
+}
+
+@media (max-width: $md2 + px) {
+  .certificate {
+    &-body {
+      padding: 12px;
+    }
+
+    &-title {
+      margin: 0 0 4px;
+    }
+  }
+}
+
+@media (max-width: $md3 + px) {
+  .certificate {
+    &-img {
+      border-radius: 8px 8px 0 0;
+    }
+
+    &-body {
+      padding: 24px 12px 16px;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.04),
+      0 12px 12px 0 rgba(0, 0, 0, 0.04);
+      border-radius: 0 0 8px 8px;
+    }
+
+    &-title {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    &-price-current {
+      font-weight: 500;
+    }
+
+    &-price-old {
+      font-size: 12px;
+    }
+
+    &-fav {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 24px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: var(--white);
+
+      svg {
+        width: 18px;
+        height: 18px;
+        position: relative;
+        top: 2px;
+      }
+    }
+  }
+}

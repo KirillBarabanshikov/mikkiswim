@@ -1,0 +1,23 @@
+@use 'variables' as *;
+@use 'fonts';
+@use 'base';
+@use 'null';
+@use 'animation';
+@use 'typography';
+@use 'videojs';
+@import '@splidejs/splide/dist/css/splide.min.css';
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1 1 auto;
+}
+
+body.lock {
+  overflow: hidden;
+}

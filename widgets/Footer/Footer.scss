@@ -1,0 +1,89 @@
+@use '/app/assets/scss/variables' as *;
+
+.footer {
+  color: var(--gray);
+  padding: 40px 0;
+  margin-top: auto;
+
+  &-container {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  &-menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px 60px;
+    justify-content: center;
+  }
+
+  &-link {
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  &-socials {
+    display: flex;
+    gap: 30px;
+  }
+
+  &-social {
+    cursor: pointer;
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  &-description {
+    font-size: 20px;
+  }
+}
+
+.footer.white {
+  color: var(--white);
+
+  .footer-socials {
+    opacity: 0.5;
+  }
+
+  .footer-description {
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: $md2 + px) {
+  .footer {
+    &-container {
+      max-width: 560px;
+    }
+  }
+}
+
+@media (max-width: $md3 + px) {
+  .footer {
+    &-container {
+      gap: 12px;
+    }
+
+    &-menu {
+      gap: 24px;
+      margin: 0 0 36px;
+    }
+
+    &-link {
+      flex: 0 0 100%;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    &-description {
+      font-size: 16px;
+    }
+  }
+}

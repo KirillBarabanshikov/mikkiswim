@@ -1,0 +1,12 @@
+@use '/app/assets/scss/variables' as *;
+
+.progress {
+  position: relative;
+  height: 4px;
+  width: 100%;
+  flex: 0 1 100%;
+  display: block;
+  background-color: var(--gray-400);
+  border-radius: 4px;
+  overflow: hidden;
+}

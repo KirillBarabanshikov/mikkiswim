@@ -1,0 +1,127 @@
+@use "/app/assets/scss/variables" as *;
+
+.form {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  &-item {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+
+    .form-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      &.height {
+        min-height: 60px;
+      }
+    }
+  }
+
+  &-label {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  &-description {
+    font-size: 14px;
+    color: var(--gray);
+    line-height: 155%;
+
+    .text {
+      display: flex;
+      justify-content: space-between;
+
+      span {
+        color: var(--black);
+      }
+    }
+  }
+
+  &-price {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid var(--gray-400);
+    padding-top: 8px;
+
+    .price {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 155%;
+    }
+
+    .text {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      line-height: 155%;
+
+      span {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--yellow);
+
+        svg {
+          width: 18px;
+        }
+      }
+    }
+  }
+
+  &-actions {
+    display: flex;
+    gap: 20px;
+
+    button {
+      font-size: 14px;
+      flex: 1 1 auto;
+    }
+  }
+
+  .switcher-block {
+    flex: 0 0 140px;
+  }
+
+  &-flex {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    .datepicker {
+      flex: 1 1 50%;
+
+    }
+
+    .input {
+      flex: 1 1 50%;
+    }
+  }
+}
+
+@media (max-width: $md2 + px) {
+  .form {
+    &-description {
+      font-size: 12px;
+    }
+  }
+}
+
+@media (max-width: $md3 + px) {
+  .form {
+    &-actions {
+      flex-direction: column;
+      gap: 16px;
+    }
+  }
+}

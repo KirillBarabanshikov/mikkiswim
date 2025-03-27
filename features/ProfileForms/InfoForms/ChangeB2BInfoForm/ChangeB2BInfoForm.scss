@@ -1,0 +1,34 @@
+.form {
+  display: flex;
+  min-width: 554px;
+  flex-direction: column;
+  gap: 36px;
+
+  &-item {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &-inputs_grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 20px;
+    row-gap: 14px;
+  }
+
+  &-inputs_flex {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &-label {
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  button {
+    max-width: 153px;
+  }
+}

@@ -1,0 +1,147 @@
+@use '/app/assets/scss/variables' as *;
+@use '/app/assets/scss/mixins' as m;
+
+.catalog {
+  position: fixed;
+  inset: 0;
+  background: var(--white);
+  z-index: 3;
+
+  &-container {
+    padding: 48px 0;
+  }
+
+  &-nav {
+  }
+
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--black);
+  }
+
+  &-logo {
+    width: 140px;
+    @media (min-width: $md2 + px) {
+      display: none;
+    }
+  }
+
+  &-close {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+  }
+
+  &-menu {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 96px;
+    padding: 64px 0;
+    overflow: auto;
+    max-height: 85dvh;
+    max-width: 550px;
+  }
+
+  &-col {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  &-link {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    justify-content: space-between;
+    cursor: pointer;
+
+    svg {
+      color: var(--gray);
+      width: 24px;
+      height: 24px;
+      @media (min-width: $md3 + px) {
+        display: none;
+      }
+    }
+  }
+
+  &-img {
+    max-width: 945px;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+@media (max-width: $md1 + px) {
+  .catalog {
+    &-menu {
+      gap: 32px;
+    }
+
+    &-img {
+      max-width: 600px;
+    }
+  }
+}
+
+@media (max-width: $md2 + px) {
+  .catalog {
+    &-menu {
+      justify-content: space-between;
+    }
+
+    &-img {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: $md3 + px) {
+  .catalog {
+    &-container {
+      padding: 20px 0;
+    }
+
+    &-header {
+      padding: 0 16px;
+    }
+
+    &-logo {
+      width: 120px;
+    }
+
+    &-menu {
+      @include m.no-scroll;
+      margin-top: 48px;
+      padding: 0 0 48px;
+      flex-direction: column;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    &-col {
+      gap: 8px;
+    }
+
+    &-link {
+      font-size: 14px;
+      padding: 16px;
+      background: var(--gray-300);
+      border-radius: 16px;
+    }
+  }
+}

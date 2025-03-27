@@ -1,0 +1,96 @@
+@use '/app/assets/scss/variables' as *;
+
+.page {
+  padding: 24px 0 72px;
+  background-color: var(--gray-300);
+
+  &-container {
+    margin-top: 48px;
+    display: flex;
+    justify-content: center;
+    gap: 180px;
+  }
+
+  &-content {
+    flex: 0 0 555px;
+  }
+
+  &-side {
+    flex: 0 0 420px;
+  }
+
+  &-title {
+    font-weight: 700;
+    font-size: 20px;
+  }
+
+  &-image {
+    margin: 24px 0;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  &-description {
+    margin-top: 16px;
+    font-size: 14px;
+
+    :deep(br)  {
+      display: block;
+      margin-bottom: 16px;
+      content: '';
+    }
+  }
+}
+
+@media (max-width: $md2 + px) {
+  .page {
+    padding: 24px 0;
+
+    &-container {
+      gap: 32px;
+    }
+
+    &-content {
+      flex: 1 1 50%;
+    }
+
+    &-side {
+      flex: 1 1 50%;
+    }
+
+    &-title {
+      font-size: 16px;
+    }
+
+    &-description {
+      font-size: 12px;
+    }
+  }
+}
+
+@media (max-width: $md3 + px) {
+  .page {
+    &-container {
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    &-content {
+      flex: 1 1 50%;
+    }
+
+    &-side {
+      flex: 1 1 50%;
+    }
+
+    &-title {
+      font-size: 16px;
+    }
+
+    &-description {
+      font-size: 12px;
+    }
+  }
+}

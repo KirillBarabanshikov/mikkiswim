@@ -1,0 +1,153 @@
+@use '/app/assets/scss/variables' as *;
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  min-width: 224px;
+
+  &-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .subtitle {
+      font-weight: 700;
+      font-size: 20px;
+    }
+
+    .email {
+      font-size: 14px;
+    }
+
+    .coach-block {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 16px;
+      padding: 5px 20px;
+      width: 119px;
+      height: 25px;
+
+      p {
+        font-weight: 700;
+        font-size: 10px;
+        color: var(--white);
+      }
+    }
+    .blue-bg {
+      background: var(--blue);
+    }
+    .green-bg {
+      background: var(--green);
+    }
+  }
+
+  &-loyalty {
+    display: none;
+  }
+
+  &-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.1s all ease-in-out;
+
+      .item-title {
+
+      }
+
+      span {
+        svg {
+          display: none;
+          width: 24px;
+        }
+      }
+
+      &.active {
+        font-weight: 700;
+      }
+    }
+  }
+
+  &-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    .item {
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  }
+}
+
+@media (max-width: $md2 + 'px') {
+  .menu {
+    gap: 24px;
+    &-loyalty {
+      width: 100%;
+      margin-top: 16px;
+      display: block;
+    }
+    &-footer {
+      margin-top: 24px;
+    }
+  }
+}
+
+@media (max-width: $md3 + 'px') {
+  .menu {
+    gap: 0;
+
+    &-loalty {
+      width: 100%;
+      margin-top: 16px;
+      display: block;
+    }
+
+    &-list {
+      gap: 0;
+
+      .item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--gray-400);
+        padding: 18px 0;
+
+        &.active {
+          font-weight: 400;
+        }
+
+        span {
+          svg {
+            display: block;
+            width: 24px;
+          }
+        }
+      }
+    }
+
+    &-footer {
+      margin-top: 18px;
+      gap: 0;
+
+      .item {
+        padding: 18px 0;
+        border-bottom: 1px solid var(--gray-400);
+        font-size: 16px;
+        font-weight: 400;
+        cursor: pointer;
+      }
+    }
+  }
+}

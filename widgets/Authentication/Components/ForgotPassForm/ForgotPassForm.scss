@@ -1,0 +1,29 @@
+.forgot {
+  width: 100%;
+  display: flex;
+  margin-top: 36px;
+  position: relative;
+
+  .form {
+    &-text {
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+
+    &-inputs {
+      margin-bottom: 36px;
+    }
+
+    &-actions {
+      .submit-button {
+        width: 100%;
+      }
+    }
+  }
+  .error-message{
+    margin-top: 36px;
+    color: var(--red);
+    font-size: 13px;
+    text-align: center;
+  }
+}

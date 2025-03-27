@@ -1,0 +1,19 @@
+@use '/app/assets/scss/variables' as *;
+
+.search {
+  &-history {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+
+.list {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

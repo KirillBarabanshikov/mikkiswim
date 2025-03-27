@@ -1,0 +1,43 @@
+@use '/app/assets/scss/variables' as *;
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  user-select: none;
+
+  &-btn {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--gray-100);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover{
+      background-color: var(--gray-400);
+    }
+
+    &.disabled{
+      opacity: 0.5;
+      cursor: default;
+
+      &:hover{
+        background-color: var(--gray-100);
+      }
+    }
+
+    svg {
+      width: 16px;
+    }
+  }
+
+  span{
+    min-width: 16px;
+    text-align: center;
+  }
+}

@@ -1,0 +1,40 @@
+.app .video-js .vjs-big-play-button {
+  width: 64px;
+  height: 64px;
+  background: var(--bg-white-alpha);
+  color: var(--text-blue);
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app .vjs-icon-placeholder {
+  width: 24px;
+  height: 24px;
+}
+
+.app .video-js .vjs-big-play-button .vjs-icon-placeholder:before {
+  content: '';
+  width: 24px;
+  height: 24px;
+  display: block;
+  position: static;
+  background: url('/app/assets/img/icons/play.svg') center/cover no-repeat;
+}
+
+.app .vjs-controls-disabled .vjs-big-play-button,
+.app .vjs-has-started .vjs-big-play-button,
+.app .vjs-using-native-controls .vjs-big-play-button,
+.app .vjs-error .vjs-big-play-button {
+  display: none;
+}
+
+.app .video-js:hover .vjs-big-play-button,
+.app .video-js .vjs-big-play-button:focus {
+  background: var(--bg-white);
+}
+
+.app .video-js {
+}

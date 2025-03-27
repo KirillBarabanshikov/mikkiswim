@@ -1,0 +1,130 @@
+@use 'variables' as *;
+
+.title {
+  text-transform: uppercase;
+  line-height: 120%;
+  font-family: var(--font-second), sans-serif;
+  font-size: 46px;
+  font-weight: 400;
+
+  @media (max-width: ($md3 + px)) {
+    font-size: 38px;
+  }
+
+  &-large {
+    font-family: var(--font-second), sans-serif;
+    font-size: 80px;
+
+    @media (max-width: ($md2 + px)) {
+      font-size: 60px;
+    }
+
+    @media (max-width: ($md3 + px)) {
+      font-size: 40px;
+    }
+  }
+
+  &-md {
+    font-size: 38px;
+    @media (max-width: ($md3 + px)) {
+      font-size: 24px;
+    }
+  }
+
+  &-s {
+    font-size: 30px;
+    @media (max-width: ($md3 + px)) {
+      font-size: 18px;
+    }
+  }
+
+  &-xs {
+    font-size: 24px;
+    @media (max-width: ($md3 + px)) {
+      font-size: 16px;
+    }
+  }
+
+  &-xxs {
+    font-size: 20px;
+    @media (max-width: ($md3 + px)) {
+      font-size: 14px;
+    }
+  }
+}
+
+.subtitle {
+  font-family: var(--font-main), sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 120%;
+
+  @media (max-width: ($md2 + px)) {
+    font-size: 24px;
+  }
+
+  @media (max-width: ($md3 + px)) {
+    font-size: 16px;
+  }
+}
+
+.text {
+  line-height: 130%;
+  @media (max-width: ($md3 + px)) {
+    font-size: 14px;
+  }
+
+  &-md {
+    font-size: 14px;
+    //@media (max-width: ($md3 + px)) {
+    //  font-size: 12px;
+    //}
+  }
+
+  &-s {
+    font-size: 12px;
+  }
+
+  &-xs {
+    font-size: 10px;
+  }
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.medium {
+  font-weight: 500;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 20px;
+
+  &-disc {
+    li {
+      list-style: disc;
+    }
+  }
+}
+
+a {
+  transition: color 0.3s ease;
+  @media (min-width: ($md3 + px)) {
+    &:hover {
+      color: var(--text-blue);
+    }
+  }
+}
+
+mark {
+  color: var(--text-blue);
+  background: transparent;
+}

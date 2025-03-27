@@ -1,0 +1,117 @@
+@use '/app/assets/scss/variables' as *;
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  row-gap: 20px;
+}
+
+.item {
+  position: relative;
+  overflow: hidden;
+
+  &-full {
+    grid-column: span 3;
+  }
+
+  &-half {
+    grid-column: span 2;
+  }
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.content {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  padding: 20px 20px 24px;
+  gap: 16px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.title-large {
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  margin-bottom: 8px;
+}
+
+.btn {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+// Максимальная ширина 767
+@media (max-width: #{$md3 + px}) {
+  .categories {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 8px;
+    row-gap: 8px;
+    column-gap: 8px;
+  }
+
+  .item {
+    height: 240px;
+
+    img {
+      border-radius: 4px;
+    }
+
+    &-full {
+      grid-column: span 2;
+      height: 310px;
+      margin: -8px -8px 0 -8px;
+
+      img{
+        border-radius: 0;
+      }
+    }
+
+    &-half {
+      grid-column: span 1;
+    }
+  }
+}
+
+// Ширина от 767 до 1240
+@media (min-width: #{$md3 + px}) and (max-width: #{$md2 + px}) {
+  .categories {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 8px;
+  }
+
+  .item {
+    height: 700px;
+
+    &-full {
+      grid-column: span 2;
+      height: 432px;
+    }
+
+    &-half {
+      grid-column: span 1;
+    }
+  }
+}
+
+// Минимальная ширина 1760
+@media (min-width: #{$md1 + px}) {
+  .item {
+    height: 700px;
+
+    &-full {
+      height: 556px;
+    }
+  }
+}

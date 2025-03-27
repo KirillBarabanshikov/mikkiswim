@@ -1,0 +1,55 @@
+@use '/app/assets/scss/variables' as *;
+
+.checkbox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  input {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  &-field {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    border: 1px solid var(--gray);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray);
+
+    .checkbox-error{
+      color: var(--red);
+      font-size: 8px;
+      margin-top: 55px;
+    }
+
+    &.checked {
+      border-color: var(--black);
+
+      svg{
+        color: var(--black);
+      }
+    }
+
+    &.error {
+      color: var(--red);
+      border-color: var(--red);
+    }
+
+    svg {
+      width: 14px;
+    }
+  }
+
+  &-label {
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,131 @@
+@use '/app/assets/scss/variables' as *;
+
+.page {
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    margin-top: 28px;
+
+    .toggle-list{
+      height: 40px;
+    }
+  }
+
+  &-categories {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  &-filter {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 24px;
+
+    &-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 1px solid var(--gray-400);
+      transition: all 0.3s;
+      color: var(--black);
+
+      &:hover {
+        background: var(--gray-400);
+      }
+    }
+
+    &-grid {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+
+      span {
+        font-size: 14px;
+        line-height: 155%;
+      }
+
+      .grids {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .item {
+          width: 32px;
+          aspect-ratio: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid var(--gray-400);
+          border-radius: 50%;
+          font-size: 14px;
+          transition: all 0.3s ease;
+          cursor: pointer;
+
+          &.active {
+            background-color: var(--black);
+            color: var(--white);
+            border: 1px solid var(--black);
+          }
+        }
+      }
+    }
+  }
+
+  .title {
+    font-family: var(--font-main);
+    font-size: 20px;
+    line-height: 155%;
+    margin: 30px 0;
+  }
+
+  .products-grid {
+    display: grid;
+    gap: 30px;
+    padding: 20px 0;
+    grid-template-columns: repeat(4, 1fr);
+
+    &.grid-cols-2 {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 848px;
+      margin: 0 auto;
+    }
+
+    &.grid-cols-3 {
+      grid-template-columns: repeat(3, 1fr);
+      max-width: 1288px;
+    }
+
+    &.grid-cols-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+}
+
+@media (max-width: $md2 + px) {
+  .products-grid{
+    grid-template-columns: repeat(3, 1fr)!important;
+  }
+}
+
+@media (max-width: $md3 + px) {
+  .categories {
+    font-weight: 700;
+  }
+
+  .page-filter {
+    display: none;
+  }
+
+  .products-grid{
+    grid-template-columns: repeat(2, 1fr)!important;
+  }
+}

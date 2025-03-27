@@ -1,0 +1,135 @@
+@use '/app/assets/scss/variables' as *;
+
+.content {
+  position: relative;
+  max-width: 1142px;
+  margin: 48px auto 196px;
+
+  &-img {
+    position: absolute;
+    &.first {
+      max-width: 990px;
+      top: 100px;
+    }
+
+    &.two {
+      max-width: 913px;
+      top: 420px;
+      right: 0;
+    }
+
+    &.three {
+      max-width: 1006px;
+      top: 900px;
+    }
+
+    &.four {
+      max-width: 555px;
+      right: 0;
+      top: 1520px;
+    }
+
+    &.laptop {
+      display: none;
+    }
+    &.mobile {
+      display: none;
+    }
+  }
+}
+
+.title {
+  font-size: 80px;
+  line-height: 137%;
+  text-transform: uppercase;
+  text-align: center;
+  font-family: var(--font-second);
+  color: var(--yellow);
+}
+
+.item {
+  width: max-content;
+  .title {
+    text-align: left;
+    font-size: 60px;
+    line-height: 183%;
+  }
+
+  .text {
+    font-size: 16px;
+    line-height: 155%;
+  }
+
+  &.first {
+    margin-left: auto;
+    margin-top: 88px;
+  }
+
+  &.two {
+    margin-top: 247px;
+  }
+
+  &.three {
+    margin-left: auto;
+    margin-top: 360px;
+  }
+
+  &.four {
+    margin-top: 311px;
+  }
+}
+
+.more {
+  margin-top: 24px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 156%;
+  letter-spacing: 0.02em;
+  text-decoration: underline;
+  color: var(--gray);
+}
+
+@media (max-width: $md2 + px) {
+  .content {
+    &-img {
+      display: none;
+
+      &.laptop {
+        display: block;
+        position: static;
+      }
+    }
+  }
+  .item {
+    display: none;
+  }
+  .more {
+    margin-left: 17vw;
+    margin-top: -30px;
+    font-size: 2vw;
+  }
+}
+
+@media (max-width: $md3 + px) {
+  .content {
+    margin: 0 auto 56px;
+    &-img {
+      &.laptop {
+        display: none;
+      }
+      &.mobile {
+        display: flex;
+        position: static;
+        justify-content: center;
+      }
+    }
+  }
+  .title {
+    font-size: 15vw;
+  }
+  .more {
+    font-size: 3vw;
+    margin: 24px auto 0;
+    text-align: center;
+  }
+}

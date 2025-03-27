@@ -1,0 +1,102 @@
+@use '/app/assets/scss/mixins' as m;
+@use '/app/assets/scss/variables' as *;
+
+.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 6;
+  width: 360px;
+  height: 100dvh;
+  color: var(--black);
+  background: var(--white);
+  @media (max-width: $md3 + px) {
+    width: min(420px, 100dvw);
+  }
+
+  &-container {
+    @include m.no-scroll;
+    padding: 20px 36px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    overflow: auto;
+    @media (max-width: $md2 + px) {
+      gap: 24px;
+    }
+    @media (max-width: $md3 + px) {
+      gap: 12px;
+      padding: 20px 16px;
+    }
+  }
+
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0 16px;
+  }
+
+  &-logo {
+    svg {
+      width: 120px;
+    }
+  }
+
+  &-close {
+    cursor: pointer;
+
+    svg {
+      width: 24px;
+    }
+  }
+
+  &-footer {
+    margin-top: auto;
+    color: var(--gray);
+  }
+
+  &-socials {
+    display: flex;
+    gap: 24px;
+  }
+
+  &-description {
+    font-size: 14px;
+    margin: 12px 0 0;
+  }
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 12px 0;
+
+  &-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--gray-400);
+  }
+
+  &-border {
+    border-bottom: 1px solid var(--gray-400);
+  }
+
+  &-arrow {
+    margin-left: auto;
+    width: 24px;
+    color: var(--gray);
+  }
+}
+
+.social {
+  cursor: pointer;
+
+  svg {
+    width: 30px;
+  }
+}

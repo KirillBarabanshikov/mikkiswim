@@ -1,0 +1,78 @@
+@use '/app/assets/scss/variables' as *;
+
+.content {
+  max-width: 554px;
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+
+    &-item {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    &-inputs_grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 520px;
+      column-gap: 32px;
+      row-gap: 24px;
+    }
+
+    &-inputs_flex {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    &-label {
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    &-comment {
+      margin-top: 16px;
+    }
+
+
+    &-description {
+      color: var(--gray);
+    }
+
+    &-actions {
+      display: flex;
+      margin-bottom: 16px;
+
+      button {
+        font-size: 14px;
+        flex: 1 1 auto;
+      }
+    }
+  }
+
+  .button-back {
+    display: flex;
+    margin-bottom: 36px;
+
+    button {
+      font-size: 14px;
+      flex: 1 1 auto;
+    }
+  }
+  .error-message{
+    color: red;
+    text-align: center;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: $md3 + 'px') {
+  .form-inputs_grid {
+    grid-template-columns: repeat(1, 1fr) !important;
+    row-gap: 16px !important;
+  }
+}
+
+

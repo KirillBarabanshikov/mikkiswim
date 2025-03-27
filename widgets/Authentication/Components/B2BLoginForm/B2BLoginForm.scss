@@ -1,0 +1,64 @@
+.login {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .logo {
+    width: 285px;
+    height: 60px;
+    margin-bottom: 64px;
+
+    svg {
+      width: 182px;
+      height: 40px;
+    }
+  }
+
+  .subtitle {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .form {
+
+    &-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 37px;
+    }
+
+    .form-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 64px;
+
+      &-href {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        font-weight: 700;
+        font-size: 14px;
+        cursor: pointer;
+
+        span {
+          font-weight: 400;
+        }
+      }
+
+      &-button {
+        width: 100%;
+      }
+    }
+  }
+  .error-message{
+    color: red;
+    text-align: center;
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+}

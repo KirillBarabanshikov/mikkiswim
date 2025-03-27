@@ -1,0 +1,102 @@
+@use '/app/assets/scss/variables' as *;
+
+.notifier {
+  position: fixed;
+  top: 100px;
+  right: 100px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 12px 12px 0 rgba(0, 0, 0, 0.04);
+  background: var(--white);
+  padding: 20px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow: hidden;
+  max-width: 280px;
+
+  &:before {
+    display: block;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 5px;
+    background-color: var(--green);
+    animation: notifier-close 5s linear forwards;
+  }
+
+  @keyframes notifier-close {
+    0% {
+      width: 0;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 12px;
+
+    svg {
+      width: 24px;
+      color: var(--green);
+    }
+  }
+
+  &-close {
+    svg {
+      width: 24px;
+    }
+  }
+
+  .product {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    &-img {
+      width: 70px;
+      height: 90px;
+
+      img {
+        border-radius: 5px;
+        object-fit: contain;
+      }
+    }
+
+    &-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    &-title {
+      font-size: 12px;
+    }
+
+    &-price {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    &-size {
+      font-weight: 600;
+      font-size: 11px;
+
+      span {
+        color: var(--gray);
+      }
+    }
+  }
+}

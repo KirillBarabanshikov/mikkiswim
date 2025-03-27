@@ -1,0 +1,27 @@
+.conditions {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+  text-align: center;
+  max-width: 554px;
+
+  &-title {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 155%;
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    .item {
+      font-size: 14px;
+      line-height: 155%;
+      span {
+        font-weight: 700;
+      }
+    }
+  }
+}

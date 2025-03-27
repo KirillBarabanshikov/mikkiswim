@@ -1,0 +1,15 @@
+@use '/app/assets/scss/variables' as *;
+
+.stars {
+  display: flex;
+  gap: 2px;
+  .star {
+    width: 20px;
+    height: 20px;
+    color: var(--yellow);
+
+    &.grey{
+      color: var(--gray-400);
+    }
+  }
+}

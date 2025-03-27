@@ -1,0 +1,5 @@
+@use "/app/assets/scss/mixins" as m;
+
+
+@include m.card-product('favorites')
+

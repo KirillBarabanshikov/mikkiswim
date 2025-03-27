@@ -1,0 +1,51 @@
+.signin {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+
+  button {
+    width: 100%;
+  }
+
+  &-form {
+
+    .form-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .password-hint {
+      font-size: 11px;
+      text-align: center;
+      margin-bottom: 64px;
+      color: var(--gray)
+    }
+
+    .terms-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 64px;
+
+      .privacy-policy {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        font-size: 12px;
+
+        span {
+          font-weight: 700;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+  .error-message{
+    margin-top: 10px;
+    color: red;
+    text-align: center;
+    font-size: 13px;
+  }
+}

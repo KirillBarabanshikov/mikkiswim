@@ -1,0 +1,25 @@
+@use '@/app/assets/scss/animation.scss';
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  //animation: 0.3s display-card linear;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  &-item {
+    font-size: 12px;
+    color: var(--gray);
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

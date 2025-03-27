@@ -1,0 +1,181 @@
+@use '/app/assets/scss/mixins';
+@use '/app/assets/scss/variables' as *;
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 30px;
+  border-radius: 30px;
+  font-weight: 700;
+  min-height: 56px;
+  transition: all 0.3s linear;
+  user-select: none;
+  white-space: nowrap;
+  border: 1px solid transparent;
+
+  @media (max-width: $md2 + px) {
+    min-height: 48px;
+    font-size: 14px;
+  }
+
+  @media (max-width: $md3 + px) {
+    min-height: 40px;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--black);
+  }
+}
+
+.block {
+  width: 100%;
+}
+
+.outline {
+  border: 1px solid transparent;
+  background: none !important;
+}
+
+.disabled {
+  border-color: var(--gray);
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.black {
+  border-color: var(--black);
+  background: var(--black);
+  color: var(--white);
+
+  &:hover {
+    background: var(--black-opacity);
+  }
+}
+
+.black-20 {
+  border-color: var(--black);
+  background: var(--black);
+  color: var(--white);
+  opacity: 0.5;
+
+  &:hover {
+    background: var(--black-opacity);
+  }
+}
+
+.black-gradient {
+  background: linear-gradient(
+    180deg,
+    rgba(48, 48, 48, 0.5) 0%,
+    rgba(48, 48, 48, 0.8) 100%
+  );
+  color: var(--white);
+
+  &:hover {
+    background: linear-gradient(
+      180deg,
+      rgba(48, 48, 48, 0.8) 50%,
+      rgba(48, 48, 48, 1) 100%
+    );
+  }
+}
+
+.white-gradient {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, #fff 100%);
+  color: var(--purple);
+
+  &:hover {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.5) 50%,
+      #fff 100%
+    );
+  }
+}
+
+.small {
+  min-height: 48px;
+}
+
+.white-20 {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: var(--white);
+  border: 1px solid transparent;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+}
+
+.micro {
+  min-height: 32px;
+}
+
+.icon {
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 0;
+  min-height: auto;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.gray {
+  background-color: var(--gray-100);
+}
+
+.green {
+  background-color: var(--green);
+  color: var(--white);
+
+  &:hover {
+    background-color: var(--green-opacity);
+  }
+}
+
+.red {
+  background-color: var(--red);
+  color: var(--white);
+
+  &:hover {
+    background-color: var(--red-opacity);
+  }
+}
+
+.blue {
+  color: #fff;
+  border-color: var(--vk);
+  background-color: var(--vk);
+}
+
+.white-gray {
+  color: var(--gray);
+  border: 1px solid var(--gray);
+}
+.smallest {
+  min-height: 32px;
+  font-size: 12px;
+}
+.white {
+  background-color: var(--white);
+  &:hover {
+    background-color: var(--gray-100);
+  }
+}
+
+.gray {
+  color: var(--black);
+  background-color: var(--gray-300);
+  border: 1px solid transparent;
+  font-weight: 400;
+  padding: 14px 32px;
+
+  &:hover {
+    background-color: var(--gray-400);
+  }
+}

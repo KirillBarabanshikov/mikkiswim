@@ -1,0 +1,79 @@
+@use '/app/assets/scss/variables' as *;
+
+.purchases {
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 848px;
+
+  &-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  &-toggle {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 24px;
+
+    .toggle-actions {
+      display: flex;
+      gap: 4px;
+      border-radius: 30px;
+      padding: 4px;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 12px 12px 0 rgba(0, 0, 0, 0.04);
+      background: var(--white);
+    }
+  }
+
+  .content-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+
+  .zero-block {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: relative;
+    align-items: center;
+  }
+}
+
+@media (max-width: $md3 + 'px') {
+  .purchases {
+    flex: 1 1 100%;
+    &-container {
+      width: 100%;
+    }
+
+    &-toggle {
+      width: 100%;
+      p {
+        display: none;
+      }
+      .toggle-actions{
+        width: 100%;
+
+        button{
+          width: 100%;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,66 @@
+@use '/app/assets/scss/variables' as *;
+
+.purchases-list {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+
+  .purchase-card {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .item-left {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .date {
+        font-weight: 400;
+        font-size: 20px;
+      }
+
+      .id {
+        font-weight: 400;
+        font-size: 14px;
+        color: var(--gray);
+      }
+    }
+
+    .item-right {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .mikkicoins {
+        display: flex;
+        gap: 6px;
+        font-weight: 700;
+        font-size: 20px;
+        color: var(--yellow);
+
+        svg {
+          width: 25px;
+        }
+      }
+
+      .amount {
+        font-weight: 400;
+        font-size: 14px;
+        color: var(--gray);
+      }
+    }
+  }
+}
+
+@media (max-width: $md1 + 'px') {
+  .purchases-list {
+    width: 100%;
+
+    .purchases-card {
+      min-width: 500px;
+    }
+  }
+}

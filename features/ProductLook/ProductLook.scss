@@ -1,0 +1,80 @@
+@use '/app/assets/scss/variables' as *;
+
+.recommend {
+  margin-top: 96px;
+
+  &-content {
+    padding: 0 96px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+  }
+
+  &-title {
+    font-weight: 700;
+    font-size: 24px;
+  }
+
+  &-list {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 32px;
+  }
+
+  &-slider{
+    width: 100%;
+    .swiper{
+      padding: 0 16px 16px;
+    }
+  }
+}
+
+@media (max-width: $md1 + px) {
+  .recommend {
+    &-content {
+      padding: 0 32px;
+      gap: 24px;
+    }
+
+    &-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}
+
+@media (max-width: $md2 + px) {
+  .recommend {
+    margin-top: 48px;
+
+    &-content {
+      padding: 0 16px;
+    }
+
+    &-title {
+      font-size: 20px;
+    }
+
+    &-list {
+      gap: 32px;
+    }
+  }
+}
+
+@media (max-width: $md3 + px) {
+  .recommend {
+    &-content {
+      padding: 0;
+    }
+
+    &-title {
+      font-size: 16px;
+    }
+
+    &-list {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+}

@@ -1,0 +1,45 @@
+@use '/app/assets/scss/variables' as *;
+
+.message-card {
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 12px 12px 0 rgba(0, 0, 0, 0.04);
+  background: var(--background-light-gray);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  .subtitle {
+    font-weight: 700;
+    font-size: 20px;
+  }
+
+  .message-item {
+    display: flex;
+    gap: 32px;
+    img{
+      width: 80px;
+      height: 80px;
+      border-radius: 5px;
+      object-fit: cover;
+    }
+    .subtitle{
+      font-weight: 400;
+      font-size: 14px;
+    }
+  }
+  .message-actions{
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--gray);
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: $md2 + 'px') {
+  .info {
+    max-width: 554px;
+    flex: 1;
+  }
+}

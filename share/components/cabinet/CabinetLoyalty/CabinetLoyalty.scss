@@ -1,0 +1,229 @@
+@use '/app/assets/scss/variables' as *;
+
+.loyalty {
+  &-title {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 155%;
+    text-align: center;
+  }
+
+  &-text {
+    font-size: 14px;
+    text-align: center;
+    margin-top: 32px;
+  }
+
+  &-list {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    .item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      border-radius: 20px;
+      padding: 24px;
+
+      &-img {
+        position: absolute;
+        top: 50%;
+        right: -20px;
+        transform: translateY(-50%);
+      }
+
+      &-status {
+        position: absolute;
+        top: -8px;
+        right: 64px;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 0.02em;
+        text-align: right;
+        padding: 0 8px;
+        background: #fff;
+      }
+
+      &-level {
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 155%;
+      }
+
+      &-title {
+        font-weight: 700;
+        line-height: 155%;
+      }
+
+      &-discount {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+
+        .discount {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-size: 14px;
+          line-height: 150%;
+
+          span {
+            font-weight: 700;
+            font-size: 24px;
+          }
+        }
+      }
+
+      &-progress {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        span {
+          flex: 1 1 100%;
+          font-size: 14px;
+          line-height: 155%;
+        }
+      }
+
+      &.bronze {
+        background: linear-gradient(270deg, rgba(255, 183, 131, 0.8) 0%, rgba(255, 183, 131, 0) 100%);
+
+        &.active,
+        &.prev {
+          border: 1px solid var(--bronze);
+        }
+
+        .item-level,
+        .item-status {
+          color: var(--bronze);
+        }
+
+        .item-discount {
+          .discount {
+            span {
+              color: var(--bronze);
+            }
+          }
+        }
+      }
+
+      &.silver {
+        background: linear-gradient(270deg, rgba(147, 223, 255, 0.8) 0%, rgba(147, 223, 255, 0.1) 100%);
+
+        &.active,
+        &.prev {
+          border: 1px solid var(--silver);
+        }
+
+        .item-level,
+        .item-status {
+          color: var(--silver);
+        }
+
+        .item-discount {
+          .discount {
+            span {
+              color: var(--silver);
+            }
+          }
+        }
+      }
+
+      &.gold {
+        background: linear-gradient(270deg, rgba(255, 189, 62, 0.8) 0%, rgba(255, 189, 62, 0.1) 100%);
+
+        &.active,
+        &.prev {
+          border: 1px solid var(--yellow);
+        }
+
+        .item-level,
+        .item-status {
+          color: var(--yellow);
+        }
+
+        .item-discount {
+          .discount {
+            span {
+              color: var(--yellow);
+            }
+          }
+        }
+      }
+
+      &.platinum {
+        background: linear-gradient(270deg, #ecff76 0%, rgba(210, 236, 106, 0.74) 18.61%, rgba(183, 255, 111, 0.5) 47.77%, rgba(156, 255, 154, 0.3) 77.98%, rgba(149, 255, 217, 0.2) 100%);
+
+        &.active,
+        &.prev {
+          border: 1px solid var(--platinum);
+        }
+
+        .item-level,
+        .item-status {
+          color: var(--platinum);
+        }
+
+        .item-discount {
+          .discount {
+            span {
+              color: var(--platinum);
+            }
+          }
+        }
+      }
+
+      &.brilliant {
+        background: linear-gradient(270deg, #52bfed 0%, #a8f5ff 33.97%, rgba(114, 204, 255, 0.5) 60.15%, rgba(50, 230, 255, 0.1) 100%);
+
+        &.active,
+        &.prev {
+          border: 1px solid var(--brilliant);
+        }
+
+        .item-level,
+        .item-status {
+          color: var(--brilliant);
+        }
+
+        .item-discount {
+          .discount {
+            span {
+              color: var(--brilliant);
+            }
+          }
+        }
+      }
+
+      &.active,
+      &.prev {
+        background: #fff;
+      }
+
+      &.prev{
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+@media (max-width: #{$md3 + px}) {
+  .item-discount{
+    flex-direction: column;
+    align-items: start !important;
+    gap: 12px !important;
+  }
+  .item-progress{
+    flex-direction: column;
+    align-items: start !important;
+    gap: 8px !important;
+
+    .progress{
+      flex: auto;
+    }
+  }
+}

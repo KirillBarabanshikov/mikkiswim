@@ -1,0 +1,32 @@
+.purchases {
+
+  &__header {
+    display: grid;
+    grid-template-columns: 114px 115px 261px;
+    gap: 32px;
+    padding: 10px;
+
+    &-item {
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 155%;
+
+      &:last-child {
+        text-align: right;
+      }
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  @media (max-width: 768px) {
+    &__header {
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+  }
+}

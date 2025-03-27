@@ -1,0 +1,38 @@
+:root {
+  //fonts
+  --font-main: 'Montserrat';
+  --font-second: 'Lifehack Sans';
+
+  //colors
+  --black: #303030;
+  --black-opacity: rgba(48, 48, 48, 0.85);
+  --gray: #909090;
+  --gray-400: #dcdcdc;
+  --gray-300: #fafafa;
+  --gray-200: #f9f9f9;
+  --gray-100: #F4F4F4;
+  --white: #ffffff;
+  --red: #ff4747;
+  --red-opacity: rgba(255, 71, 71, 0.5);
+  --green: #11cb5b;
+  --green-opacity: rgba(17, 203, 91, 0.5);
+  --blue: #35bcf6;
+  --blue-opacity: rgba(53, 188, 246, 0.5);
+  --yellow: #ffbd3e;
+  --yellow-opacity: rgba(255, 189, 62, 0.5);
+  --vk: #0077FF;
+  --purple: #ce62f4;
+  --page-overlay: rgba(0, 0, 0, 0.2);
+  --bronze: #FFB783;
+  --silver: #93DFFF;
+  --platinum: #5EE9C9;
+  --brilliant: #52BFED;
+
+  --index: calc(1vw + 1vh);
+}
+
+
+$md1: 1760;
+$md2: 1240;
+$md3: 767;
+

@@ -1,0 +1,22 @@
+@use '/app/assets/scss/variables' as *;
+
+.review-popup{
+  position: fixed;
+  z-index: 5;
+  inset: 0;
+  background-color: #fff;
+  padding: 16px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+
+  &-close{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    svg{
+      width: 24px;
+    }
+  }
+}

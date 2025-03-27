@@ -1,0 +1,17 @@
+@use '/app/assets/scss/variables' as *;
+
+.page {
+
+}
+
+//@media(max-width: #{$md2 + px}){
+//  .page{
+//    margin-top: 24px;
+//  }
+//}
+
+@media(max-width: #{$md3 + px}){
+  .page{
+    margin-top: 0;
+  }
+}

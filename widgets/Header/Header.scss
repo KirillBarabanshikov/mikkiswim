@@ -1,0 +1,148 @@
+@use '/app/assets/scss/variables' as *;
+
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 0;
+  z-index: 2;
+  color: var(--white);
+
+  &.black {
+    color: var(--black);
+    position: relative;
+  }
+
+  &.absolute {
+    .header-logo {
+      color: var(--black);
+    }
+    .header-actions {
+      color: var(--black);
+    }
+  }
+
+  &.transparent {
+    .header-logo {
+      opacity: 0;
+      cursor: default;
+    }
+    .header-actions {
+      color: var(--black);
+    }
+    //.header-burger{
+    //  filter: invert(1);
+    //}
+  }
+
+  &.transparent-black {
+    color: var(--black);
+    .header-logo {
+      opacity: 0;
+    }
+  }
+
+  &.profile-header {
+    color: var(--black);
+
+    .header-container {
+      justify-content: flex-start;
+    }
+
+    .header-logo {
+      margin: 0 auto 0 0;
+    }
+
+    .header-burger {
+      display: none;
+    }
+
+    .header-search {
+      display: none;
+    }
+
+    .header-user {
+      display: none;
+    }
+  }
+
+  &-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  &-container.b2b {
+    color: var(--black);
+    justify-content: space-between;
+  }
+
+  &-burger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    cursor: pointer;
+
+    svg {
+      width: 24px;
+    }
+  }
+
+  &-logo {
+    margin: 0 auto;
+    cursor: pointer;
+
+    svg {
+      width: 140px;
+      cursor: pointer;
+    }
+  }
+
+  &-logo.b2b {
+    margin-left: 0;
+  }
+
+  &-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+
+    svg {
+      width: 24px;
+      cursor: pointer;
+    }
+  }
+}
+
+@media (max-width: $md3 + px) {
+  .header {
+    &-burger {
+      span {
+        display: none;
+      }
+    }
+
+    &-logo {
+      margin: 0;
+
+      svg {
+        width: 120px;
+      }
+    }
+
+    &-actions {
+      margin-left: auto;
+    }
+
+    &-user {
+      display: none;
+    }
+    &.transparent {
+      .header-actions {
+        color: var(--white);
+      }
+    }
+  }
+}

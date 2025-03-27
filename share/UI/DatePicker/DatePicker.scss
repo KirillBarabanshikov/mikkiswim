@@ -1,0 +1,255 @@
+.datepicker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &-field {
+    border: 1px solid var(--gray-400);
+    border-radius: 30px;
+    padding: 0 16px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    transition: border-color 0.3s linear;
+  }
+
+  &-literal {
+    color: var(--gray);
+
+    &:hover {
+      background: var(--gray-400);
+    }
+  }
+
+  &-segment {
+    color: var(--black);
+
+    &[aria-valuetext="Empty"] {
+      color: var(--gray);
+    }
+
+    &:hover {
+      background: var(--gray-400);
+    }
+  }
+
+  &-trigger {
+    width: 24px;
+    height: 24px;
+    color: var(--gray);
+    margin-left: auto;
+  }
+
+  &::placeholder {
+    color: var(--gray);
+  }
+
+  &[data-invalid] {
+    border: 1px solid var(--red-opacity);
+  }
+}
+
+[data-radix-popper-content-wrapper]{
+  z-index: 1000!important;
+}
+
+.popover {
+  &-content {
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 12px 12px 0 rgba(0, 0, 0, 0.04), 0 1px 8px 0 rgba(0, 0, 0, 0.1);
+    background: var(--white);
+    width: 280px;
+    animation-duration: 400ms;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+
+    &[data-state='open'][data-side='top'] {
+      animation-name: slideDownAndFade;
+    }
+
+    &[data-state='open'][data-side='right'] {
+      animation-name: slideLeftAndFade;
+    }
+
+    &[data-state='open'][data-side='bottom'] {
+      animation-name: slideUpAndFade;
+    }
+
+    &[data-state='open'][data-side='left'] {
+      animation-name: slideRightAndFade;
+    }
+  }
+
+  &-arrow {
+    fill: white;
+  }
+}
+
+.calendar {
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 24px;
+  }
+
+  &-nav-button {
+    width: 50px;
+    height: 50px;
+    color: var(--gray);
+
+    &:hover {
+      color: var(--black);
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &-heading {
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  &-wrapper {
+  }
+
+  &-grid {
+    width: 100%;
+    user-select: none;
+    border-collapse: collapse;
+  }
+
+  &-grid-row {
+    display: grid;
+    margin-bottom: 4px;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    width: 100%;
+
+    &-days {
+      margin: 0 0 24px;
+    }
+
+    &-nums {
+      .calendar-cell {
+        &:nth-child(6),
+        &:nth-child(7) {
+          .calendar-cell-trigger {
+            &:not([data-disabled]) {
+              color: var(--red);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &-head-cell {
+    font-size: 12px;
+    font-weight: 500;
+
+    &:nth-child(6),
+    &:nth-child(7) {
+      color: var(--red);
+    }
+  }
+
+  &-cell {
+  }
+
+  &-cell-trigger {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    outline-style: none;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.25rem;
+    white-space: nowrap;
+    background-color: transparent;
+    height: 24px;
+    cursor: pointer;
+
+
+    &:hover {
+      border-color: var(--black);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 2px var(--black);
+    }
+
+    &[data-disabled] {
+      cursor: none;
+      color: var(--gray-400);
+    }
+
+    &[data-today] {
+      background-color: var(--gray-400);
+    }
+
+    &[data-selected] {
+      background-color: var(--black);
+      color: var(--white);
+    }
+
+    &[data-unavailable] {
+      color: var(--gray-400);
+      text-decoration: line-through;
+    }
+
+  }
+}
+
+
+@keyframes slideUpAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideRightAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideDownAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideLeftAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

@@ -1,0 +1,76 @@
+@use '/app/assets/scss/variables' as *;
+
+.accordion {
+  &-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .item {
+    border-radius: 20px;
+    background-color: var(--gray-300);
+
+    @media (max-width: $md2 + px) {
+      border-radius: 16px;
+    }
+
+    &-header {
+      padding: 16px 30px;
+      font-size: 20px;
+      display: flex;
+      justify-content: space-between;
+      user-select: none;
+      cursor: pointer;
+
+      span {
+        text-align: left;
+        line-height: 155%;
+      }
+
+      @media (max-width: $md2 + px) {
+        padding: 16px;
+        font-size: 16px;
+      }
+    }
+
+    &-icon {
+      width: 32px;
+      height: 32px;
+      color: var(--gray);
+      transition: transform 300ms;
+      @media (max-width: $md2 + px) {
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    &-content {
+      font-size: 14px;
+      line-height: 155%;
+      overflow: hidden;
+      transition: all 0.3s ease-out;
+      display: grid;
+      grid-template-rows: 0fr;
+      padding: 0 30px;
+      @media (max-width: $md2 + px) {
+        padding: 0 16px;
+      }
+
+      .text {
+        min-height: 0;
+      }
+    }
+
+    &.active {
+      .item-content {
+        grid-template-rows: 1fr;
+        padding-bottom: 16px;
+      }
+
+      .item-icon{
+        transform: rotate(135deg);
+      }
+    }
+  }
+}

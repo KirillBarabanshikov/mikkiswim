@@ -1,0 +1,68 @@
+@use '/app/assets/scss/variables' as *;
+
+.search {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  background: var(--gray-300);
+  padding: 48px 97px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  @media (max-width: $md2 + px) {
+    padding: 32px 16px 24px 16px;
+  }
+  @media (max-width: $md3 + px) {
+    height: 100vh;
+    padding: 10px;
+  }
+}
+
+.icon-close,
+.icon-search,
+.icon-arrow {
+  cursor: pointer;
+  max-width: 24px;
+  max-height: 24px;
+}
+
+.icon-close {
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.form-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .icon-search {
+    position: absolute;
+    top: 8px;
+    right: 45px;
+    color: var(--gray);
+  }
+}
+
+@media (max-width: $md2 + px) {
+  .form-search-input {
+    background: var(--gray-200);
+    border-radius: 16px;
+    border: none;
+    padding: 0 16px 0 45px;
+  }
+  .icon-search {
+    transform: rotate(90deg);
+    left: 70px;
+  }
+  .icon-arrow {
+    margin: 0 8px 0 16px;
+  }
+}

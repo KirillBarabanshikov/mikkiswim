@@ -1,0 +1,170 @@
+@use '/app/assets/scss/variables' as *;
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 12px 12px 0 rgba(0, 0, 0, 0.04);
+  background: var(--gray-300);
+  border-radius: 16px;
+  padding: 32px 24px;
+  flex: 1 1 100%;
+  min-width: 848px;
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+
+    .status {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      border-radius: 8px;
+      padding: 2px 8px;
+      background: var(--white);
+      color: var(--gray);
+
+      svg {
+        width: 20px;
+      }
+    }
+
+    .actions {
+      display: flex;
+      gap: 22px;
+      color: var(--gray);
+      cursor: pointer;
+
+      svg {
+        width: 22px;
+      }
+    }
+  }
+
+  &-product {
+    margin-top: 14px;
+    display: flex;
+    gap: 32px;
+
+    .image {
+      flex: 0 0 80px;
+
+      img {
+        width: 80px;
+        height: 80px;
+        border-radius: 5px;
+        object-fit: cover;
+      }
+    }
+
+    .name {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .product-category {
+        font-weight: 400;
+        font-size: 14px;
+        color: var(--gray);
+      }
+
+      .product-title {
+        font-weight: 700;
+        font-size: 20px;
+      }
+    }
+  }
+
+  .score {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+    flex: 1;
+
+    .stars {
+      display: flex;
+      gap: 2px;
+
+      svg {
+        width: 20px;
+        color: var(--gray-400);;
+      }
+
+      .filled {
+        color: var(--yellow)
+      }
+    }
+  }
+
+  &-advantages,
+  &-disadvantages {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .subtitle {
+      font-size: 16px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+  }
+}
+
+.popup {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 6;
+
+  &-content {
+    background: white;
+    border-radius: 16px;
+    padding: 56px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 24px;
+    min-width: 554px;
+
+    .subtitle {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 4px;
+      line-height: 155%;
+
+      p {
+        font-weight: 400;
+        font-size: 13px;
+      }
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+  }
+}
+
+@media(max-width: $md1 + 'px') {
+  .card {
+    min-width: 100%;
+  }
+}
+
+@media(max-width: $md3 + 'px') {
+  .card {
+    min-width: 100%;
+  }
+
+  .score {
+    flex-direction: row !important;
+    justify-content: space-between;
+  }
+}

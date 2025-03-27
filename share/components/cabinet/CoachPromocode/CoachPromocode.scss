@@ -1,0 +1,97 @@
+@use '/app/assets/scss/variables' as *;
+
+.promo {
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 12px 12px 0 rgba(0, 0, 0, 0.04);
+  background: var(--gray-300);
+  max-width: 261px;
+
+  &-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &-header {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 155%;
+    color: var(--gray)
+  }
+
+  &-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .code {
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 150%;
+      color: var(--yellow);
+    }
+
+    .copy {
+      display: flex;
+      gap: 12px;
+      cursor: pointer;
+
+      svg{
+        color: var(--gray-400);
+        width: 20px;
+      }
+
+      p {
+        color: var(--gray);
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 155%;
+      }
+    }
+  }
+
+  &-discount {
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 155%;
+  }
+
+  p {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 155%;
+  }
+}
+
+@media (max-width: $md2 + 'px') {
+  .promo {
+    margin-bottom: 32px;
+    &-header {
+      font-size: 13px;
+    }
+
+    &-content {
+      .code {
+        font-size: 29px;
+      }
+
+      .copy {
+        p {
+          opacity: 0;
+        }
+      }
+    }
+    &-discount{
+      font-size: 16px;
+    }
+    p{
+      font-size: 13px;
+    }
+  }
+}
+@media (max-width: $md3 + 'px') {
+  .promo {
+    max-width: 100%;
+  }
+}

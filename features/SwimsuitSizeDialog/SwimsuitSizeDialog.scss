@@ -1,0 +1,122 @@
+@use '/app/assets/scss/variables' as *;
+
+.size {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+
+  &-close {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    cursor: pointer;
+
+    svg {
+      width: 24px;
+    }
+  }
+
+  &-header {
+    text-align: center;
+    font-size: 48px;
+    font-weight: 700;
+  }
+
+  &-content {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+  }
+
+  &-img {
+    max-width: 150px;
+  }
+
+  &-table {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+
+    .size-ceil {
+      &:last-child,
+      &:first-child {
+        flex: 0 0 70px;
+        text-align: left;
+      }
+    }
+
+    &.header-row {
+      font-weight: 700;
+    }
+  }
+
+  &-ceil {
+    flex: 0 0 30px;
+    text-align: center;
+
+    &.green {
+      &:before {
+        display: block;
+        content: '';
+        width: 30px;
+        height: 30px;
+        flex: 0 0 30px;
+        border-radius: 50%;
+        background-color: var(--green);
+      }
+    }
+
+    &.yellow {
+      &:before {
+        display: block;
+        content: '';
+        width: 30px;
+        height: 30px;
+        flex: 0 0 30px;
+        border-radius: 50%;
+        background-color: var(--yellow);
+      }
+    }
+
+    &.red {
+      &:before {
+        display: block;
+        content: '';
+        width: 30px;
+        height: 30px;
+        flex: 0 0 30px;
+        border-radius: 50%;
+        background-color: var(--red);
+      }
+    }
+
+    &.blue {
+      &:before {
+        display: block;
+        content: '';
+        width: 30px;
+        height: 30px;
+        flex: 0 0 30px;
+        border-radius: 50%;
+        background-color: var(--blue);
+      }
+    }
+  }
+
+  &-footer {
+    display: flex;
+    justify-content: center;
+
+    svg {
+      width: 254px;
+      color: var(--gray-400);
+    }
+  }
+}

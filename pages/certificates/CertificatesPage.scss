@@ -1,0 +1,124 @@
+@use '/app/assets/scss/variables' as *;
+
+.page{
+  &-header {
+    margin: 24px 0;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  &-catalog {
+    font-size: 20px;
+  }
+
+  &-filter {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+    &-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 1px solid var(--gray-400);
+      transition: all 0.3s;
+      color: var(--black);
+
+      &:hover {
+        background: var(--gray-400);
+      }
+    }
+
+    &-grid {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+
+      span {
+        font-size: 14px;
+        line-height: 155%;
+      }
+
+      .grids {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .item {
+          width: 32px;
+          aspect-ratio: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid var(--gray-400);
+          border-radius: 50%;
+          font-size: 14px;
+          transition: all 0.3s ease;
+          cursor: pointer;
+
+          &.active {
+            background-color: var(--black);
+            color: var(--white);
+            border: 1px solid var(--black);
+          }
+        }
+      }
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+      pointer-events: none;
+    }
+  }
+
+  &-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 48px 32px;
+
+    &.two {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+@media (max-width: $md2 + px) {
+  .page {
+    &-list {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+
+      &.two {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}
+
+@media (max-width: $md3 + px) {
+  .page {
+    &-catalog {
+      font-weight: 700;
+    }
+
+    &-category {
+      display: none;
+    }
+
+    &-list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    &-filter-btn {
+      border-color: transparent;
+    }
+  }
+}

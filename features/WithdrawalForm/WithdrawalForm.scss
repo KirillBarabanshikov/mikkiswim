@@ -1,0 +1,59 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+
+  &-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 24px;
+
+    .subtitle {
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 155%;
+    }
+
+    p {
+      line-height: 155%;
+      font-size: 14px;
+    }
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  &-label {
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 155%;
+  }
+
+  &-item {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px 20px;
+  }
+
+  &-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+
+    button{
+      min-width: 261px;
+    }
+  }
+}
