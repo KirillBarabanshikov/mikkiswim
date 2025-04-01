@@ -67,7 +67,7 @@ export interface ProductCabinetReview {
 }
 
 export interface Product {
-  id: string | number
+  id: number
   average: number
   title: string
   inFavorites?: boolean

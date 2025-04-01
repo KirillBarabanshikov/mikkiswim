@@ -100,6 +100,7 @@ const emit = defineEmits<{
 @use '/app/assets/scss/variables' as *;
 
 .size {
+  z-index: 10000;
   display: flex;
   flex-direction: column;
   gap: 48px;

@@ -65,19 +65,18 @@ export const getAllProduct = async (
 }
 
 export const getProduct = async (slug: string): Promise<Product> => {
+  if (!isNaN(Number(slug))) {
+    throw new Error('Invalid product slug')
+  }
+
   const {
     public: { API }
   } = useRuntimeConfig()
 
-  try {
-    const response = await axios.get<Product>(
-      `${API}/api/products/slug?slug=${slug}`
-    )
-    return response.data
-  } catch (error) {
-    console.error('Error fetching products:', error)
-    throw error
-  }
+  const response = await axios.get<Product>(
+    `${API}/api/products/slug?slug=${slug}`
+  )
+  return response.data
 }
 
 export const getProductReviews = async (

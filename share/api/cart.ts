@@ -66,3 +66,57 @@ export const removeFromCart = async (product: {
 
   return response.data
 }
+
+export const addCombinationToCart = async (combination: {
+  combinationId: number
+  sizes: Array<{
+    productId: number
+    size: string
+  }>
+}) => {
+  const authStore = useAuthStore()
+  const token = authStore.accessToken
+
+  if (!token) {
+    throw new Error('Ошибка: пользователь не авторизован')
+  }
+
+  const {
+    public: { API }
+  } = useRuntimeConfig()
+
+  console.log('Отправляемые данные комбинации в корзину:', combination)
+
+  const response = await axios.post(
+    `${API}/api/cart/combination/add`,
+    combination,
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  )
+
+  return response.data
+}
+
+export const removeCombinationFromCart = async (uuid: string) => {
+  const authStore = useAuthStore()
+  const token = authStore.accessToken
+
+  if (!token) {
+    throw new Error('Ошибка: пользователь не авторизован')
+  }
+
+  const {
+    public: { API }
+  } = useRuntimeConfig()
+
+  const response = await axios.post(
+    `${API}/api/cart/combination/remove`,
+    { uuid },
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  )
+
+  return response.data
+}

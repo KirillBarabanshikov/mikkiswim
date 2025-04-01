@@ -3,16 +3,16 @@ import { ref } from 'vue'
 
 import { useProductCombinations } from '~/entities/product-combination/api/query'
 import CatalogFilters from '~/features/CatalogFilters/CatalogFilters.vue'
-import CatalogCard from '~/share/components/catalog/CatalogCard/CatalogCard.vue'
+import CombinationCard from '~/share/components/combinations/CombinationCard.vue'
 import { useGlobalStore } from '~/share/store/globalStore'
 import IconFilter from '~/share/UI/Icons/IconFilter.vue'
 import SkeletonCard from '~/share/UI/SkeletonCard/SkeletonCard.vue'
 import { useBodyLock } from '~/share/utils/bodyLock'
 import Header from '~/widgets/Header/Header.vue'
-import CombinationCard from '~/share/components/combinations/CombinationCard.vue'
 
 definePageMeta({
-  middleware: ['auth']
+  middleware: ['auth'],
+  ssr: true
 })
 
 const globalStore = useGlobalStore()

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
+
 import { useRoute, useRouter } from '#vue-router'
 import { useGlobalStore } from '~/share/store/globalStore'
 import Loader from '~/share/UI/Loader/Loader.vue'
@@ -39,7 +40,8 @@ const blackHeaderRoutes = new Set([
   'cabinet',
   'favorite',
   'vacancies-list',
-  'b2b-catalog'
+  'b2b-catalog',
+  'combinations-id'
 ])
 
 const isProductPage = computed(() => !!route.params.productSlug)
@@ -126,7 +128,7 @@ watch(
 
 <template>
   <div class="app">
-    <Loader v-if="globalStore.isLoading" />
+    <!--    <Loader v-if="globalStore.isLoading" />-->
 
     <Header v-if="isHeaderVisible" :variant="currentHeaderVariant" />
 

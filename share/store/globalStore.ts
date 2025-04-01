@@ -19,6 +19,7 @@ export const useGlobalStore = defineStore('globalStore', () => {
   const setIsLoading = (bool: boolean) => {
     isLoading.value = bool
   }
+
   const toggleIsOpenCatalog = () => {
     isOpenCatalog.value = !isOpenCatalog.value
   }

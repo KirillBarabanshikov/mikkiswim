@@ -12,15 +12,17 @@ const config = useRuntimeConfig()
 const API = config.public.API
 
 const route = useRoute()
-const catalogSlug = route.params.slug
 
 const props = defineProps<{
   combination: ProductCombination
   drag?: boolean
 }>()
 
-const onClickCombination = () => {
-  navigateTo(`/catalog/${catalogSlug}/combination/${props.combination.id}`)
+const onClickCombination = (e: MouseEvent) => {
+  console.log('Combination clicked, ID:', props.combination.id)
+  e.preventDefault()
+  e.stopPropagation()
+  navigateTo(`/combinations/${props.combination.id}`)
 }
 
 const totalPrice = computed(() => {
@@ -41,7 +43,7 @@ const totalOldPrice = computed(() => {
 </script>
 
 <template>
-  <div class="combination" @click.stop="onClickCombination">
+  <div class="combination" @click="onClickCombination">
     <div class="combination-body">
       <div class="combination-products">
         <div

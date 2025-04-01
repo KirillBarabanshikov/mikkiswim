@@ -4,6 +4,7 @@ import type { Product, ProductReview } from '~/entities/product/model/Product'
 import { setCertificatesPreview } from '~/share/api/certificate'
 import {
   addViewerProducts,
+  getAllProduct, // Добавляем новый метод
   getLookProducts,
   getProduct,
   getProductCombination,
@@ -13,9 +14,7 @@ import {
   getProductsBySlug,
   getProductsFilters,
   getRecommendedProducts,
-  setProductsSizesEmail,
-  getAllProduct // Добавляем новый метод
-} from '~/share/api/product'
+  setProductsSizesEmail} from '~/share/api/product'
 
 export const useProducts = (params: Record<string, any>) =>
   useQuery<Product[], Error>({
