@@ -5,6 +5,9 @@ import { useRoute } from 'vue-router'
 import type { ProductCombination } from '~/entities/product-combination/model/ProductCombination'
 import { useFormatPrice } from '~/share/utils/useFormatPrice'
 
+import IconFavorite from '../../UI/Icons/IconFavorite.vue'
+import IconPlus from '../../UI/Icons/IconPlus.vue'
+
 const config = useRuntimeConfig()
 const API = config.public.API
 
@@ -147,7 +150,7 @@ const totalOldPrice = computed(() => {
     }
 
     .plus-icon {
-      z-index: 2;
+      z-index: 1;
       margin-block: -15px;
       display: flex;
       align-items: center;
