@@ -19,6 +19,7 @@ const globalStore = useGlobalStore()
 const { lock, unlock } = useBodyLock()
 
 const { data: productCombinations, isPending } = useProductCombinations()
+const safeProductCombinations = computed(() => productCombinations.value || [])
 
 const columns = ref(4)
 const setColumns = (num: number) => {
@@ -91,7 +92,7 @@ const refetchCombinations = () => {
           ]"
         >
           <template
-            v-for="combination in productCombinations"
+            v-for="combination in safeProductCombinations"
             :key="combination.id"
           >
             <CombinationCard :combination="combination" :drag="true" />

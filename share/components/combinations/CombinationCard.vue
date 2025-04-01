@@ -1,12 +1,8 @@
 <script setup lang="ts">
-//@ts-ignore
-import { Splide, SplideSlide, SplideTrack } from '@splidejs/vue-splide'
 import { defineProps } from 'vue'
 import { useRoute } from 'vue-router'
 
 import type { ProductCombination } from '~/entities/product-combination/model/ProductCombination'
-import Badge from '~/share/UI/Badge/Badge.vue'
-import IconArrowRight from '~/share/UI/Icons/IconArrowRight.vue'
 import { useFormatPrice } from '~/share/utils/useFormatPrice'
 
 const config = useRuntimeConfig()
@@ -20,87 +16,75 @@ const props = defineProps<{
   drag?: boolean
 }>()
 
-const options = {
-  arrows: true,
-  progress: false,
-  pagination: false,
-  type: 'fade',
-  rewind: true,
-  drag: props.drag
-}
-
 const onClickCombination = () => {
   navigateTo(`/catalog/${catalogSlug}/combination/${props.combination.id}`)
 }
 
-// const totalPrice = computed(() =>
-//   props.combination.combinationProducts.reduce(
-//     (sum, cp) => sum + (cp.product.price - (cp.discount || 0)),
-//     0
-//   )
-// )
-//
-// const totalOldPrice = computed(() =>
-//   props.combination.combinationProducts.reduce(
-//     (sum, cp) => sum + cp.product.oldPrice,
-//     0
-//   )
-// )
+const totalPrice = computed(() => {
+  if (!props.combination?.combinationsProducts?.length) return 0
+  return props.combination.combinationsProducts.reduce(
+    (sum, cp) => sum + (cp.product.price - (cp.discount || 0)),
+    0
+  )
+})
+
+const totalOldPrice = computed(() => {
+  if (!props.combination?.combinationsProducts?.length) return 0
+  return props.combination.combinationsProducts.reduce(
+    (sum, cp) => sum + cp.product.oldPrice,
+    0
+  )
+})
 </script>
 
 <template>
   <div class="combination" @click.stop="onClickCombination">
-    <div class="combination-img">
-      <Splide
-        ref="splide"
-        class="splider"
-        :options="options"
-        :has-track="false"
-      >
-        <SplideTrack>
-          <SplideSlide>
-            <div class="slide">
-              <img :src="API + combination.image" alt="Combination image" />
-            </div>
-          </SplideSlide>
-        </SplideTrack>
-        <div class="splide__arrows">
-          <button @click.stop class="splide__arrow splide__arrow--prev">
-            <IconArrowLeft />
-          </button>
-          <button @click.stop class="splide__arrow splide__arrow--next">
-            <IconArrowRight />
-          </button>
-        </div>
-      </Splide>
-    </div>
     <div class="combination-body">
-      <div class="combination-title">
-        <span>{{ combination.title }}</span>
-      </div>
       <div class="combination-products">
         <div
-          v-for="cp in combination.combinationProducts"
+          v-for="(cp, index) in combination.combinationsProducts"
           :key="cp.id"
           class="product-item"
         >
-          <span>{{ cp.product.title }}</span>
-          <span class="price">
-            {{ useFormatPrice(cp.product.price - (cp.discount || 0)) }} ₽
-            <span v-if="cp.discount" class="discount">
-              (-{{ cp.discount }} ₽)
-            </span>
-          </span>
+          <div class="product-content">
+            <img
+              :src="API + cp.product.images[0]?.image"
+              alt="Product image"
+              class="product-image"
+            />
+            <div class="product-info">
+              <span class="product-catalog" v-if="cp.product.catalogs?.length">
+                {{ cp.product.catalogs[0].title }}
+              </span>
+              <span class="product-title">{{ cp.product.title }}</span>
+            </div>
+          </div>
+          <div
+            v-if="index < combination.combinationsProducts.length - 1"
+            class="plus-icon"
+          >
+            <IconPlus />
+          </div>
         </div>
       </div>
-      <!--      <div class="combination-price">-->
-      <!--        <div class="combination-price-current">-->
-      <!--          {{ useFormatPrice(totalPrice) }} ₽-->
-      <!--        </div>-->
-      <!--        <div v-if="totalOldPrice > totalPrice" class="combination-price-old">-->
-      <!--          {{ useFormatPrice(totalOldPrice) }} ₽-->
-      <!--        </div>-->
-      <!--      </div>-->
+      <div class="combination-footer">
+        <div class="column">
+          <div class="combination-title">
+            <span>{{ combination.title }}</span>
+          </div>
+          <div class="combination-price">
+            <span class="current-price"
+              >{{ useFormatPrice(totalPrice) }} ₽</span
+            >
+            <span v-if="totalOldPrice > totalPrice" class="old-price">
+              {{ useFormatPrice(totalOldPrice) }} ₽
+            </span>
+          </div>
+        </div>
+        <div class="favorite-icon">
+          <IconFavorite />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -108,104 +92,120 @@ const onClickCombination = () => {
 <style scoped lang="scss">
 .combination {
   cursor: pointer;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.2s;
-
-  &:hover {
-    transform: scale(1.02);
-  }
-
-  &-img {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-
-    .splider {
-      width: 100%;
-      height: 250px; /* Фиксированная высота для изображения */
-    }
-
-    .slide {
-      width: 100%;
-      height: 100%;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    }
-
-    .splide__arrows {
-      .splide__arrow {
-        background: rgba(0, 0, 0, 0.5);
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        &--prev {
-          left: 10px;
-          transform: rotate(180deg);
-        }
-
-        &--next {
-          right: 10px;
-        }
-      }
-    }
-  }
+  border-radius: 5px;
+  background: var(--gray-300);
 
   &-body {
-    padding: 15px;
-  }
-
-  &-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
   }
 
   &-products {
-    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 
-    .product-item {
+  .product-item {
+    min-width: 368px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+
+    .product-content {
       display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-      margin-bottom: 5px;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      border-radius: 20px;
+      padding: 12px;
+      background: var(--white);
 
-      .price {
-        font-weight: 500;
+      .product-image {
+        width: 88px;
+        height: 88px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
 
-        .discount {
-          color: #ff4d4f;
-          font-size: 12px;
-          margin-left: 5px;
-        }
+      .product-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .product-catalog {
+        font-size: 12px;
+      }
+
+      .product-title {
+        font-size: 20px;
       }
     }
+
+    .plus-icon {
+      z-index: 2;
+      margin-block: -15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 5px solid var(--text-white);
+      border-radius: 16px;
+      width: 32px;
+      height: 32px;
+      background: var(--gray-400);
+      padding: 4px;
+    }
+  }
+
+  &-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+  }
+
+  &-title {
+    font-weight: 400;
+    font-size: 20px;
   }
 
   &-price {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     align-items: center;
 
-    &-current {
+    .current-price {
       font-size: 16px;
       font-weight: 700;
-      color: #000;
+      color: #303030;
     }
 
-    &-old {
-      font-size: 14px;
-      color: #999;
+    .old-price {
       text-decoration: line-through;
+      color: var(--gray);
+    }
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .favorite-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: #666;
+
+    &:hover {
+      color: #ff4d4f;
     }
   }
 }
