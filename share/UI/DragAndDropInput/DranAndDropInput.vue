@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 interface Props {
   modelValue: File | null
   placeholder?: string

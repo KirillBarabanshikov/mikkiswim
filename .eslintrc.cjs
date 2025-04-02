@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  extends: ['@nuxt/eslint-config', 'plugin:prettier/recommended', 'prettier'],
+  extends: ['@nuxt/eslint-config', 'plugin:prettier/recommended', 'prettier', 'plugin:storybook/recommended'],
   env: {
     browser: true,
     node: true

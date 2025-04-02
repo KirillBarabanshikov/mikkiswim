@@ -26,6 +26,14 @@ export default defineNuxtConfig({
   ],
   devtools: { enabled: true },
   modules: modulesConfig(process.env.MODE as MODE),
+  storybook: {
+    url: 'http://localhost:6006',
+    storybookRoute: '/__storybook__',
+    port: 6006,
+    modules: {
+      exclude: ['@nuxtjs/svg-sprite', 'nuxt-icons']
+    }
+  },
 
   pinia: {
     // autoImports: ['defineStore', ['defineStore', 'definePiniaStore']]
@@ -48,7 +56,7 @@ export default defineNuxtConfig({
   },
 
   build: {
-    transpile: ['@vue/runtime-core', '@vue/runtime-dom']
+    transpile: ['@vue/runtime-core', '@vue/runtime-dom', "@storybook-vue/nuxt"]
   },
 
   image: {

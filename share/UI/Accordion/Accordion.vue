@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import type { Accordion, AccordionItem } from '~/share/UI/Accordion/types'
+import { ref } from 'vue'
 import IconAccordion from '~/share/UI/Icons/IconAccordion.vue'
 
-defineProps<Accordion>()
+defineProps<{
+  list: any
+}>()
 
-const activeItem = ref<AccordionItem | null>(null)
+const activeItem = ref<any | null>(null)
 
-const setActiveItem = (item: AccordionItem) =>
+const setActiveItem = (item: any) =>
   activeItem.value?.id === item.id
     ? (activeItem.value = null)
     : (activeItem.value = item)
