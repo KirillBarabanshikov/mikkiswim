@@ -26,6 +26,7 @@ const currentLabel = computed(
 )
 
 const selectSort = (value: string) => {
+  console.log('Selected sortBy:', value)
   emit('update:sortBy', value)
   isModalOpen.value = false
 }

@@ -9,6 +9,7 @@ import IconFilter from '~/share/UI/Icons/IconFilter.vue'
 import SkeletonCard from '~/share/UI/SkeletonCard/SkeletonCard.vue'
 import { useBodyLock } from '~/share/utils/bodyLock'
 import Header from '~/widgets/Header/Header.vue'
+import { useProductsFilters } from '~/entities/product/api/query'
 
 definePageMeta({
   middleware: ['auth'],
@@ -31,7 +32,7 @@ const openFilters = () => {
   lock()
 }
 
-const filters = ref(null)
+const { data: filters } = useProductsFilters('b2bIn')
 
 const refetchCombinations = () => {
   console.log('Refetch combinations with filters')
