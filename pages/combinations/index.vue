@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import { useProductsFilters } from '~/entities/product/api/query'
 import { useProductCombinations } from '~/entities/product-combination/api/query'
 import CatalogFilters from '~/features/CatalogFilters/CatalogFilters.vue'
 import CombinationCard from '~/share/components/combinations/CombinationCard.vue'
@@ -9,7 +10,6 @@ import IconFilter from '~/share/UI/Icons/IconFilter.vue'
 import SkeletonCard from '~/share/UI/SkeletonCard/SkeletonCard.vue'
 import { useBodyLock } from '~/share/utils/bodyLock'
 import Header from '~/widgets/Header/Header.vue'
-import { useProductsFilters } from '~/entities/product/api/query'
 
 definePageMeta({
   middleware: ['auth'],

@@ -2,9 +2,9 @@
 import { useRoute } from 'vue-router'
 
 import { useProductCombination } from '~/entities/product-combination/api/query'
+import { addCombinationToCart } from '~/share/api/cart'
 import SizeHelpButton from '~/share/components/combinations/SizeHelpButton.vue'
 import { useFormatPrice } from '~/share/utils/useFormatPrice'
-import { addCombinationToCart } from '~/share/api/cart'
 
 definePageMeta({
   middleware: ['auth'],
@@ -119,7 +119,7 @@ const addToCart = async () => {
 
                 <div class="combination-viewers">
                   <IconEye />
-                  1652
+                  {{ combination.viewers }}
                 </div>
               </div>
             </div>

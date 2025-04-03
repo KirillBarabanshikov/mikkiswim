@@ -5,6 +5,7 @@ export interface ProductCombination {
   title: string
   image: string
   combinationsProducts: CombinationProducts[]
+  viewers: number
   defaultCost: number
   discountCost: number
 }

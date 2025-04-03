@@ -7,6 +7,7 @@ import { useFormatPrice } from '~/share/utils/useFormatPrice'
 
 import IconFavorite from '../../UI/Icons/IconFavorite.vue'
 import IconPlus from '../../UI/Icons/IconPlus.vue'
+import { addViewToCombination } from '~/entities/product-combination/api/query'
 
 const config = useRuntimeConfig()
 const API = config.public.API
@@ -22,6 +23,7 @@ const onClickCombination = (e: MouseEvent) => {
   console.log('Combination clicked, ID:', props.combination.id)
   e.preventDefault()
   e.stopPropagation()
+  addViewToCombination(props.combination.id)
   navigateTo(`/combinations/${props.combination.id}`)
 }
 
