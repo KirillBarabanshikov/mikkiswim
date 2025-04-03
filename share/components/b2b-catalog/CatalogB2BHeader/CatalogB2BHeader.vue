@@ -4,7 +4,7 @@ import CatalogB2BSortBy from '~/share/components/b2b-catalog/CatalogB2BSortBy/Ca
 
 const emit = defineEmits<{
   (e: 'open-filters'): void
-  (e: 'update:sortBy', value: string): void
+  (e: 'update:sort-by', value: string): void
 }>()
 
 const props = defineProps<{
@@ -17,7 +17,7 @@ const openFilters = () => {
 
 const handleSortByUpdate = (value: string) => {
   console.log('Header received sortBy:', value)
-  emit('update:sortBy', value)
+  emit('update:sort-by', value)
 }
 </script>
 
@@ -28,6 +28,14 @@ const handleSortByUpdate = (value: string) => {
       @update:sort-by="handleSortByUpdate"
     />
     <CatalogB2BFilters @open-filters="openFilters" />
+
+    <!-- Отладочная информация -->
+    <div
+      class="debug-info"
+      style="font-size: 12px; margin-left: 10px; color: #999"
+    >
+      (header) sortBy: {{ props.sortBy }}
+    </div>
   </div>
 </template>
 

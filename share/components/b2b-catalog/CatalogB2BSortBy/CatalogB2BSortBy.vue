@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps<{
   sortBy: string
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:sortBy', value: string): void
+  (e: 'update:sort-by', value: string): void
 }>()
 
 const isModalOpen = ref(false)
@@ -19,15 +19,27 @@ const sortOptions = [
   { label: 'Со скидкой', value: 'discount' }
 ]
 
-const currentLabel = computed(
-  () =>
-    sortOptions.find((option) => option.value === props.sortBy)?.label ||
-    'Со скидкой'
+const currentLabel = computed(() => {
+  const option = sortOptions.find((option) => option.value === props.sortBy)
+  console.log(
+    'Current sortBy in dropdown:',
+    props.sortBy,
+    'matched option:',
+    option?.label || 'default'
+  )
+  return option?.label || 'Со скидкой'
+})
+
+watch(
+  () => props.sortBy,
+  (newValue) => {
+    console.log('CatalogB2BSortBy received new sortBy value:', newValue)
+  }
 )
 
 const selectSort = (value: string) => {
-  console.log('Selected sortBy:', value)
-  emit('update:sortBy', value)
+  console.log('Selected sortBy in dropdown:', value)
+  emit('update:sort-by', value)
   isModalOpen.value = false
 }
 </script>
@@ -111,6 +123,10 @@ const selectSort = (value: string) => {
       svg {
         width: 24px;
         color: var(--gray-400);
+      }
+
+      &.active {
+        font-weight: 600;
       }
     }
   }

@@ -144,7 +144,26 @@ export const getProducts = async (
   }
 }
 
-export const getProductsFilters = async (catalogSlug: string) => {
+interface FilterOption {
+  content: string
+  value: string
+}
+
+interface Prices {
+  min: number
+  max: number
+}
+
+interface Filter {
+  colors: FilterOption[]
+  sizes: FilterOption[]
+  childCatalogs: any[]
+  prices: Prices
+}
+
+export const getProductsFilters = async (
+  catalogSlug: string
+): Promise<Filter> => {
   const {
     public: { API }
   } = useRuntimeConfig()

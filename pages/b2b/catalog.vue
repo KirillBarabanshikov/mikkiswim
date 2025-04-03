@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query'
-import { ref, watch } from 'vue'
+import { ref, watch, shallowRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useProductsFilters } from '~/entities/product/api/query'
@@ -26,10 +26,18 @@ const filters = ref({
   limit: Number(route.query.limit) || 20
 })
 
+// Используем shallowRef для создания отдельного реактивного значения для queryKey
+const queryKey = shallowRef(['b2b-products', { ...filters.value }])
+
+// Добавим отладочную информацию для отслеживания изменений
+console.log('Initial sortBy:', filters.value.sortBy)
+
 const { data: products, isLoading } = useQuery({
-  queryKey: ['b2b-products', filters.value],
-  queryFn: () =>
-    $fetch(`${API}/api/products`, {
+  // Используем ссылку на queryKey вместо прямого объекта
+  queryKey: queryKey,
+  queryFn: () => {
+    console.log('Sending request with sortBy:', filters.value.sortBy)
+    return $fetch(`${API}/api/products`, {
       params: {
         sortBy: filters.value.sortBy,
         page: filters.value.page,
@@ -44,27 +52,79 @@ const { data: products, isLoading } = useQuery({
         ...(filters.value.catalog && { catalog: filters.value.catalog })
       }
     })
+  },
+  enabled: !!filtersData.value
 })
 
+// Наблюдатель для отслеживания изменений sortBy и обновления queryKey
 watch(
-  () => filters.value.sortBy,
-  (newSortBy) => {
-    console.log('filters.sortBy updated to:', newSortBy)
-  }
+  () => filters.value,
+  (newFilters) => {
+    console.log(`filters changed, new sortBy: ${newFilters.sortBy}`)
+    // Обновляем queryKey при любом изменении фильтров, что заставит Vue Query выполнить запрос заново
+    queryKey.value = ['b2b-products', { ...newFilters }]
+  },
+  { deep: true }
 )
 
+// Флаг для определения было ли уже инициализировано
+let filtersInitialized = false
+
 watch(filtersData, (newFilters) => {
-  if (newFilters) {
-    filters.value = {
-      ...filters.value,
-      ...Object.fromEntries(
-        Object.entries(newFilters.availableFilters).filter(
-          ([key]) => key !== 'sortBy'
-        )
-      )
+  if (newFilters && !filtersInitialized) {
+    filtersInitialized = true
+
+    // Не трогаем sortBy вообще, сохраняем текущее значение из URL или default
+    const currentSortBy = filters.value.sortBy
+
+    // Задаем дефолтные значения для других фильтров только если они не были в URL
+    if (!route.query.color) {
+      filters.value.color = newFilters.colors?.[0]?.value || ''
     }
+
+    if (!route.query.size) {
+      filters.value.size = newFilters.sizes?.[0]?.value || ''
+    }
+
+    if (!route.query.priceStart) {
+      filters.value.priceStart = newFilters.prices?.min?.toString() || ''
+    }
+
+    if (!route.query.priceEnd) {
+      filters.value.priceEnd = newFilters.prices?.max?.toString() || ''
+    }
+
+    console.log(
+      'After filter init, sortBy =',
+      filters.value.sortBy,
+      'original value was',
+      currentSortBy
+    )
   }
 })
+
+// Отдельная функция для обновления сортировки
+const updateSortBy = (newValue: string) => {
+  console.log('updateSortBy called with:', newValue)
+  filters.value.sortBy = newValue
+}
+
+// Наблюдатель для обновления URL
+const routerUpdatePending = ref(false)
+
+watch(
+  () => filters.value,
+  (newFilters) => {
+    if (!routerUpdatePending.value) {
+      routerUpdatePending.value = true
+      console.log('Updating URL query params with sortBy:', newFilters.sortBy)
+      router.push({ query: { ...newFilters } }).finally(() => {
+        routerUpdatePending.value = false
+      })
+    }
+  },
+  { deep: true }
+)
 
 const isOpenFilter = ref(false)
 const filterMenuRef = ref<HTMLElement | null>(null)
@@ -81,8 +141,10 @@ onClickOutside(filterMenuRef, () => {
 <template>
   <div class="page">
     <div class="container">
+      <!-- Прямое обновление через отдельную функцию -->
       <CatalogB2BHeader
-        v-model:sort-by="filters.sortBy"
+        :sort-by="filters.sortBy"
+        @update:sort-by="updateSortBy"
         @open-filters="toggleIsOpenFilters"
       />
       <CatalogB2BCardList
@@ -90,6 +152,13 @@ onClickOutside(filterMenuRef, () => {
         :products="products"
         :loading="isLoading"
       />
+      <!-- Отладочная информация -->
+      <div
+        class="debug-info"
+        style="margin-top: 20px; font-size: 12px; color: #999"
+      >
+        Текущая сортировка: {{ filters.sortBy }}
+      </div>
     </div>
 
     <transition name="menu-top">
@@ -164,7 +233,7 @@ onClickOutside(filterMenuRef, () => {
     top: 0;
     left: 0;
     z-index: 10;
-    height: auto; /* Изменено на auto, чтобы вместить все фильтры */
+    height: auto;
     background: var(--white);
     box-shadow: 0 25px 25px 0 rgba(0, 0, 0, 0.1);
     padding: 20px;
