@@ -1,9 +1,9 @@
 import { useQueryClient } from '@tanstack/vue-query'
-import Cookies from 'js-cookie'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+import { useCookie } from '#app'
 import { addWishesByIds } from '~/entities/wish/api/query'
 import { fetchUserProfile } from '~/share/api/auth'
 import { useRefreshToken } from '~/share/query/auth/useAuth'
@@ -19,6 +19,11 @@ export const useAuthStore = defineStore('authStore', () => {
   const globalStore = useGlobalStore()
   const favoriteStore = useFavoriteStore()
   const queryClient = useQueryClient()
+  const refreshTokenCookie = useCookie('refresh_token', {
+    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 дней
+    sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production'
+  })
 
   const userStatus = ref<string | null>(null)
 
@@ -33,6 +38,13 @@ export const useAuthStore = defineStore('authStore', () => {
   ) => {
     if (data.token && data.refresh_token) {
       setAccessToken(data.token)
+      console.log('Установка refresh_token:', data.refresh_token)
+      refreshTokenCookie.value = data.refresh_token // Сохраняем через useCookie
+      console.log('refresh_token сохранен в cookies:', refreshTokenCookie.value)
+      if (!refreshTokenCookie.value) {
+        console.error('Не удалось сохранить refresh_token в cookies!')
+      }
+
       await addWishesByIds(favoriteStore.favorites)
 
       try {
@@ -48,13 +60,9 @@ export const useAuthStore = defineStore('authStore', () => {
         await router.push('/b2b')
       }
 
-      Cookies.set('refresh_token', data.refresh_token, {
-        expires: 30,
-        httpOnly: false,
-        sameSite: 'Strict',
-        secure: true
-      })
       globalStore.toggleIsOpenAuthentication(false)
+    } else {
+      console.error('Некорректные данные для логина:', data)
     }
   }
 
@@ -62,7 +70,7 @@ export const useAuthStore = defineStore('authStore', () => {
     isAuthenticated.value = false
     accessToken.value = ''
     userStore.setUser(null)
-    Cookies.remove('refresh_token')
+    refreshTokenCookie.value = null
     queryClient.clear()
     await router.push('/')
   }
@@ -75,7 +83,11 @@ export const useAuthStore = defineStore('authStore', () => {
   }
 
   const refreshAccessToken = async (apiUrl: string) => {
-    const refreshToken = Cookies.get('refresh_token')
+    const refreshToken = refreshTokenCookie.value
+    if (!refreshToken) {
+      console.error('refresh_token отсутствует в cookies')
+      return { success: false, error: 'No refresh token available' }
+    }
     const { mutateAsync: refresh } = useRefreshToken(apiUrl)
     try {
       console.log('Попытка обновления токена с refresh_token:', refreshToken)
@@ -85,12 +97,13 @@ export const useAuthStore = defineStore('authStore', () => {
         setAccessToken(response.token)
         const userProfile = await fetchUserProfile(apiUrl)
         userStore.setUser(userProfile)
+        return { success: true }
       } else {
         throw new Error('Не удалось обновить токен')
       }
     } catch (error) {
       console.error('Ошибка обновления токена:', error)
-      throw error
+      return { success: false, error: error.message }
     }
   }
 

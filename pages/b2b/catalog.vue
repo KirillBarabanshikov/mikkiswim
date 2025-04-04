@@ -11,6 +11,11 @@ const { data: filtersData } = useProductsFilters('b2bIn')
 const route = useRoute()
 const router = useRouter()
 
+definePageMeta({
+  middleware: ['auth'],
+  requiresAuth: true
+})
+
 const config = useRuntimeConfig()
 const API = config.public.API
 
