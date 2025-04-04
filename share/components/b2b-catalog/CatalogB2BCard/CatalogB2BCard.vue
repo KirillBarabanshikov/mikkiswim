@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 
+import { useCartStore } from '~/share/store/cartStore'
+
+const cartStore = useCartStore()
+
 const {
   public: { API }
 } = useRuntimeConfig()
@@ -30,15 +34,20 @@ const emit = defineEmits<{
 
 const selectedSize = ref('')
 const counter = ref(1)
+const isActionsVisible = ref(false)
+const initialCounter = ref(1)
 
 watch(
   () => props.product,
   (newProduct) => {
-    if (newProduct.sizes.length > 0 && !selectedSize.value) {
+    if (!newProduct || !newProduct.sizes?.length) return
+
+    if (!selectedSize.value) {
       const activeSize =
         newProduct.sizes.find((size) => size.active) || newProduct.sizes[0]
       selectedSize.value = activeSize.title
       counter.value = 1
+      initialCounter.value = 1
     }
   },
   { immediate: true }
@@ -47,13 +56,14 @@ watch(
 watch(selectedSize, (newSize) => {
   emit('update:size', props.product.id, newSize)
   counter.value = 1
+  initialCounter.value = 1
   emit('update:quantity', props.product.id, newSize, counter.value)
 })
 
 const maxQuantity = computed(
   () =>
-    props.product.sizes.find((s) => s.title === selectedSize.value)?.quantity ||
-    0
+    props.product?.sizes?.find((s) => s.title === selectedSize.value)
+      ?.quantity || 0
 )
 
 const increment = () => {
@@ -70,22 +80,41 @@ const decrement = () => {
   }
 }
 
-const addToCart = () => {
-  emit('add-to-cart', props.product.id, selectedSize.value, counter.value)
+const addToCart = async () => {
+  if (!selectedSize.value) return
+
+  try {
+    await cartStore.addProductToCart({
+      productId: props.product.id,
+      size: selectedSize.value,
+      quantity: counter.value
+    })
+    initialCounter.value = counter.value
+  } catch (error) {
+    console.error('Error adding to cart:', error)
+  }
 }
 
-const isActionsVisible = ref(false)
-
 const toggleActions = () => {
+  if (isActionsVisible.value) {
+    initialCounter.value = counter.value
+  }
   isActionsVisible.value = !isActionsVisible.value
 }
 
 const cancelActions = () => {
+  counter.value = initialCounter.value
+  emit('update:quantity', props.product.id, selectedSize.value, counter.value)
   isActionsVisible.value = false
 }
 
 const collapseActions = () => {
   isActionsVisible.value = false
+}
+
+const goToCart = () => {
+  addToCart()
+  navigateTo('/b2b/basket')
 }
 </script>
 
@@ -95,7 +124,7 @@ const collapseActions = () => {
       <div class="product-wrapper">
         <img
           :src="
-            product.images[0]?.image
+            product.images?.[0]?.image
               ? `${API}${product.images[0].image}`
               : '/B2B-page/placeholder.webp'
           "
@@ -106,7 +135,7 @@ const collapseActions = () => {
           <div class="row">
             <div class="title-block">
               <div class="catalog-name">
-                {{ product.catalogs[0]?.title || 'Без каталога' }}
+                {{ product.catalogs?.[0]?.title || 'Без каталога' }}
               </div>
               <div class="product-title">{{ product.title }}</div>
             </div>
@@ -162,7 +191,7 @@ const collapseActions = () => {
           <Button class="white-gray collapse" @click="collapseActions">
             Свернуть
           </Button>
-          <Button class="green add-to-cart" @click="addToCart">
+          <Button class="green add-to-cart" @click="goToCart">
             <div class="btn-text">
               {{ counter }} шт. Размер {{ selectedSize }}
               <span>Перейти в корзину</span>
@@ -322,6 +351,7 @@ const collapseActions = () => {
     }
   }
 }
+
 .slide-enter-active,
 .slide-leave-active {
   transition: all 0.3s ease;

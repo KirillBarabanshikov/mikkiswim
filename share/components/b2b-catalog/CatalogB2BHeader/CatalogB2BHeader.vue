@@ -28,14 +28,6 @@ const handleSortByUpdate = (value: string) => {
       @update:sort-by="handleSortByUpdate"
     />
     <CatalogB2BFilters @open-filters="openFilters" />
-
-    <!-- Отладочная информация -->
-    <div
-      class="debug-info"
-      style="font-size: 12px; margin-left: 10px; color: #999"
-    >
-      (header) sortBy: {{ props.sortBy }}
-    </div>
   </div>
 </template>
 
