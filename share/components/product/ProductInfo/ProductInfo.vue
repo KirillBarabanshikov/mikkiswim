@@ -133,6 +133,7 @@ const handleAddToCart = async () => {
     )
 
     const productData = {
+      combinationId: 0,
       productId: props.product.id,
       size: selectedSize.value.content,
       quantity: selectedCount.value || 1

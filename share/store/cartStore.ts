@@ -22,10 +22,12 @@ export const useCartStore = defineStore('cart', () => {
 
   const addProductToCart = async ({
     productId,
+    combinationId,
     size,
     quantity
   }: {
     productId: number
+    combinationId: number
     size: string
     quantity: number
   }) => {
@@ -38,7 +40,7 @@ export const useCartStore = defineStore('cart', () => {
 
     // eslint-disable-next-line no-useless-catch
     try {
-      await addToCart({ productId, size, quantity })
+      await addToCart({ productId, size, quantity, combinationId })
       await fetchCart()
     } catch (error) {
       throw error

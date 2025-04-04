@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
+import { computed, ref, watch } from 'vue'
 
 import { useProductCombination } from '~/entities/product-combination/api/query'
 import { addCombinationToCart } from '~/share/api/cart'
 import SizeHelpButton from '~/share/components/combinations/SizeHelpButton.vue'
 import { useFormatPrice } from '~/share/utils/useFormatPrice'
+import { useGlobalStore } from '~/share/store/globalStore'
+import { useAuthStore } from '~/share/store/authStore'
 
 definePageMeta({
   middleware: ['auth'],
@@ -18,9 +21,38 @@ const {
 const route = useRoute()
 const combinationId = route.params.id as string
 
+const globalStore = useGlobalStore()
+const authStore = useAuthStore()
+
 const { data: combination, isPending } = useProductCombination(combinationId)
 
+// Храним выбранные размеры
 const selectedSizes = ref<Record<number, string>>({})
+
+// Устанавливаем значения по умолчанию для размеров
+const initializeDefaultSizes = () => {
+  if (combination.value?.combinationsProducts) {
+    const defaultSizes: Record<number, string> = {}
+    combination.value.combinationsProducts.forEach((cp) => {
+      if (cp.product.sizes?.length) {
+        // Берем первый доступный размер как значение по умолчанию
+        defaultSizes[cp.product.id] = cp.product.sizes[0].title
+      }
+    })
+    selectedSizes.value = defaultSizes
+  }
+}
+
+// Инициализируем размеры при загрузке комбинации
+watch(
+  () => combination.value,
+  (newCombination) => {
+    if (newCombination && Object.keys(selectedSizes.value).length === 0) {
+      initializeDefaultSizes()
+    }
+  },
+  { immediate: true }
+)
 
 const updateSize = (productId: number, size: string) => {
   selectedSizes.value[productId] = size
@@ -28,6 +60,11 @@ const updateSize = (productId: number, size: string) => {
 
 const addToCart = async () => {
   try {
+    if (!authStore.isAuthenticated) {
+      globalStore.toggleIsOpenAuthentication(true)
+      return
+    }
+
     const productsWithSizes = combination.value?.combinationsProducts.filter(
       (cp) => cp.product.sizes?.length
     )
@@ -38,7 +75,6 @@ const addToCart = async () => {
       )
 
       if (!allSizesSelected) {
-        alert('Пожалуйста, выберите размеры для всех товаров')
         return
       }
     }
@@ -47,11 +83,8 @@ const addToCart = async () => {
       combinationId: parseInt(combinationId),
       sizes: selectedSizes.value
     })
-
-    alert('Комбинация добавлена в корзину')
   } catch (error) {
     console.error('Ошибка при добавлении в корзину:', error)
-    alert('Произошла ошибка при добавлении в корзину')
   }
 }
 </script>
@@ -116,7 +149,6 @@ const addToCart = async () => {
               </div>
               <div class="combination-new-price">
                 {{ useFormatPrice(combination.discountCost) }} ₽
-
                 <div class="combination-viewers">
                   <IconEye />
                   {{ combination.viewers }}
