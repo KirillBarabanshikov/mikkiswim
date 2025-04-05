@@ -41,7 +41,8 @@ const blackHeaderRoutes = new Set([
   'favorite',
   'vacancies-list',
   'b2b-catalog',
-  'combinations-id'
+  'combinations-id',
+  'b2b-basket'
 ])
 
 const isProductPage = computed(() => !!route.params.productSlug)
@@ -114,7 +115,8 @@ const isFooterVisible = computed(
       'b2b-register',
       'vacancies-list',
       'new-password',
-      'b2b-catalog'
+      'b2b-catalog',
+      'b2b-basket'
     ].includes(route.name as string)
 )
 
