@@ -20,7 +20,7 @@ const {
   public: { API }
 } = useRuntimeConfig()
 
-const cartLength = computed(() => cartStore.items?.length || 0)
+const cartLength = computed(() => cartStore.items?.length || '')
 const displayedItems = computed(() =>
   showAllItems.value ? cartStore.items : cartStore.items.slice(0, 3)
 )
@@ -47,6 +47,10 @@ onMounted(async () => {
 const toggleShowAll = () => {
   showAllItems.value = !showAllItems.value
 }
+
+const goBack = () => {
+  navigateTo('/b2b/catalog')
+}
 </script>
 
 <template>
@@ -54,7 +58,7 @@ const toggleShowAll = () => {
     <div class="container">
       <div class="basket">
         <div class="basket__title">
-          <IconArrowLeft @click="router.back()" />
+          <IconArrowLeft @click="goBack" />
           Корзина ({{ cartLength }})
         </div>
         <div class="basket__list">
@@ -80,6 +84,7 @@ const toggleShowAll = () => {
         </button>
 
         <B2BBasketTotals
+          v-if="displayedItems.length"
           :total-quantity="totalQuantity"
           :total-weight="totalWeight"
           :total-price="totalPrice"
