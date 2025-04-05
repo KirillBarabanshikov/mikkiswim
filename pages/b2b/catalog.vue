@@ -7,6 +7,11 @@ import { useProductsFilters } from '~/entities/product/api/query'
 import CatalogB2BCardList from '~/share/components/b2b-catalog/CatalogB2BCardList/CatalogB2BCardList.vue'
 import CatalogB2BHeader from '~/share/components/b2b-catalog/CatalogB2BHeader/CatalogB2BHeader.vue'
 
+definePageMeta({
+  middleware: ['auth'],
+  requiresAuth: true
+})
+
 const { data: filtersData } = useProductsFilters('b2bIn')
 const route = useRoute()
 const router = useRouter()
