@@ -43,7 +43,7 @@ defineProps<{
     display: flex;
     justify-content: space-between;
 
-    &:last-child {
+    &:nth-child(2) {
       border-top: 1px solid var(--gray-400);
       padding-top: 21px;
       font-weight: 700;

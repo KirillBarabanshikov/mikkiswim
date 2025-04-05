@@ -219,6 +219,10 @@ const goToCart = () => {
   gap: 32px;
   padding-block: 0 32px;
   border-bottom: 1px solid var(--gray-100);
+
+  &:last-child {
+    border-bottom: 1px solid transparent;
+  }
 }
 
 .product-image {

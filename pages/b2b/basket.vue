@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 import B2BBasketItem from '~/share/components/b2b-basket/B2BBasketItem/B2BBasketItem.vue'
 import B2BBasketTotals from '~/share/components/b2b-basket/B2BBasketTotals/B2BBasketTotals.vue'
@@ -7,6 +8,8 @@ import { useCartStore } from '~/share/store/cartStore'
 
 const cartStore = useCartStore()
 const showAllItems = ref(false)
+
+const router = useRouter()
 
 definePageMeta({
   middleware: ['auth'],
@@ -51,7 +54,7 @@ const toggleShowAll = () => {
     <div class="container">
       <div class="basket">
         <div class="basket__title">
-          <IconArrowLeft />
+          <IconArrowLeft @click="router.back()" />
           Корзина ({{ cartLength }})
         </div>
         <div class="basket__list">
@@ -108,6 +111,7 @@ const toggleShowAll = () => {
       font-size: 20px;
 
       &:deep(svg) {
+        cursor: pointer;
         width: 24px;
         height: 24px;
       }

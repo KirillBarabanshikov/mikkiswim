@@ -68,8 +68,10 @@ defineProps<{
     flex-shrink: 0;
 
     img {
+      width: 115px;
+      height: 150px;
       border-radius: 8px;
-      object-fit: contain;
+      object-fit: cover;
       display: block;
     }
 

@@ -183,6 +183,7 @@ const resetFilters = () => {
 .page {
   .container {
     max-width: 848px;
+    margin-bottom: 48px;
   }
 
   .filter-menu {
