@@ -6,6 +6,10 @@ defineProps<{
   totalWeight: number
   totalPrice: number
 }>()
+
+const emit = defineEmits<{
+  (e: 'continue'): void
+}>()
 </script>
 
 <template>
@@ -28,7 +32,7 @@ defineProps<{
         {{ priceFormatter(totalPrice) }}
       </div>
     </div>
-    <Button>Продолжить</Button>
+    <Button @click="emit('continue')">Продолжить</Button>
   </div>
 </template>
 

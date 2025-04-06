@@ -1,10 +1,18 @@
 <script setup lang="ts">
 import { priceFormatter } from '~/share/utils/priceFormatter'
 
-defineProps<{
+const emit = defineEmits<{
+  (e: 'delete', productId: number, size: string): void
+}>()
+
+const props = defineProps<{
   item: any
   apiUrl: string
 }>()
+
+const onDelete = () => {
+  emit('delete', props.item.product.id, props.item.size)
+}
 </script>
 
 <template>
@@ -28,7 +36,7 @@ defineProps<{
         </div>
         <div class="basket-item__actions">
           <IconEdit />
-          <IconDelete />
+          <IconDelete @click="onDelete" />
         </div>
       </div>
       <div class="basket-item__row">
