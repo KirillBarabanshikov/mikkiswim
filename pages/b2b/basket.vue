@@ -2,10 +2,10 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+import ContactsForm from '~/features/ContactsForm/ContactsForm.vue'
 import B2BBasketItem from '~/share/components/b2b-basket/B2BBasketItem/B2BBasketItem.vue'
 import B2BBasketTotals from '~/share/components/b2b-basket/B2BBasketTotals/B2BBasketTotals.vue'
 import { useCartStore } from '~/share/store/cartStore'
-import ContactsForm from '~/features/ContactsForm/ContactsForm.vue'
 
 const cartStore = useCartStore()
 const showAllItems = ref(false)

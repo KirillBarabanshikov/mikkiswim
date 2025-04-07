@@ -70,7 +70,11 @@ const clickProfile = () => {
 }
 
 const clickBasket = () => {
-  navigateTo('/basket')
+  if (!isAuthenticated.value) {
+    globalStore.toggleIsOpenAuthentication(true)
+  } else {
+    navigateTo(isB2BUser.value ? '/b2b/basket' : '/basket')
+  }
 }
 
 const clickSearch = () => {

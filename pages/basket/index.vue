@@ -195,10 +195,12 @@ definePageMeta({
     color: var(--gray-400);
     margin-right: 8px;
   }
+
   span {
     white-space: nowrap;
     cursor: pointer;
   }
+
   &-item.active {
     color: black;
   }
