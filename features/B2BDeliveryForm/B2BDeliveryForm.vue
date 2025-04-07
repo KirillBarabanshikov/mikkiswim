@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+
 import type { Address } from '~/entities/address/model/Address'
 import { DeviceSize, useSizeWindow } from '~/share/utils/useSizeWindow'
 
@@ -62,7 +63,6 @@ const goToContacts = () => {
 
 const onSubmit = () => {
   if (!isPersonalDataAgreed.value) {
-    alert('Пожалуйста, согласитесь на обработку персональных данных')
     return
   }
   console.log({
@@ -157,7 +157,7 @@ const onSubmit = () => {
         @click="onSubmit"
         :disabled="!selectedDelivery || !isPersonalDataAgreed"
       >
-        Подтвердить заказ
+        Оформить заказ
       </Button>
     </div>
   </section>
