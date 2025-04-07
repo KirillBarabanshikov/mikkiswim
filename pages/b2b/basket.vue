@@ -1,48 +1,69 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+import type { Address } from '~/entities/address/model/Address'
 import ContactsForm from '~/features/ContactsForm/ContactsForm.vue'
+import DeliveryForm from '~/features/DeliveryForm/DeliveryForm.vue'
 import B2BBasketItem from '~/share/components/b2b-basket/B2BBasketItem/B2BBasketItem.vue'
 import B2BBasketTotals from '~/share/components/b2b-basket/B2BBasketTotals/B2BBasketTotals.vue'
 import { useCartStore } from '~/share/store/cartStore'
+import IconArrowLeft from '~/share/UI/Icons/IconArrowLeft.vue'
+import IconArrowDown from '~/share/UI/Icons/IconArrowDown.vue'
+import { DeviceSize, useSizeWindow } from '~/share/utils/useSizeWindow'
+import EmptyCart from '~/share/components/basket/EmptyCart/EmptyCart.vue'
+import B2BDeliveryForm from '~/features/B2BDeliveryForm/B2BDeliveryForm.vue'
 
-const cartStore = useCartStore()
+const steps = ref([
+  { step: 'contacts', title: '1. Контакты' },
+  { step: 'delivery', title: '2. Доставка' }
+])
+
+type Step = {
+  step: string
+  title: string
+}
+
+const { deviceSize } = useSizeWindow()
+const currentStep = ref(steps.value[0])
+const selectedAddress = ref<Address | null>(null)
+const showForms = ref(false)
 const showAllItems = ref(false)
 const showDeletePopup = ref(false)
-const showFormScreen = ref(false)
 const itemToDelete = ref<{ productId: number; size: string } | null>(null)
 
+const cartStore = useCartStore()
+const { items } = storeToRefs(cartStore)
 const router = useRouter()
-
-definePageMeta({
-  middleware: ['auth'],
-  requiresAuth: true
-})
 
 const {
   public: { API }
 } = useRuntimeConfig()
 
-const cartLength = computed(() => cartStore.items?.length || 0)
+const cartLength = computed(() => items.value?.length || 0)
 const displayedItems = computed(() =>
-  showAllItems.value ? cartStore.items : cartStore.items.slice(0, 3)
+  showAllItems.value ? items.value : items.value.slice(0, 3)
 )
 const totalPrice = computed(() =>
-  cartStore.items.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
-    0
-  )
+  items.value.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
 )
 const totalWeight = computed(() =>
-  cartStore.items.reduce(
+  items.value.reduce(
     (sum, item) => sum + (item.product.weight || 0) * item.quantity,
     0
   )
 )
 const totalQuantity = computed(() =>
-  cartStore.items.reduce((sum, item) => sum + item.quantity, 0)
+  items.value.reduce((sum, item) => sum + item.quantity, 0)
 )
+const isCartEmpty = computed(() => items.value.length === 0)
+const isMobile = computed(() => deviceSize.value <= DeviceSize.MOBILE)
+
+definePageMeta({
+  middleware: ['auth'],
+  requiresAuth: true
+})
 
 onMounted(async () => {
   await cartStore.fetchCart()
@@ -80,90 +101,184 @@ const confirmDelete = async () => {
   }
 }
 
-const showForm = () => {
-  showFormScreen.value = true
+const setStep = (step: Step) => {
+  currentStep.value = step
 }
 
-const hideForm = () => {
-  showFormScreen.value = false
+const onNextStep = () => {
+  const index = steps.value.indexOf(currentStep.value)
+  if (index < steps.value.length - 1) {
+    currentStep.value = steps.value[index + 1]
+  }
 }
 
-const steps = [
-  { step: 'contacts', title: 'Контакты' },
-  { step: 'delivery', title: 'Доставка' },
-  { step: 'payment', title: 'Оплата' }
-]
+const onPrevStep = () => {
+  const index = steps.value.indexOf(currentStep.value)
+  if (index > 0) {
+    currentStep.value = steps.value[index - 1]
+  } else {
+    showForms.value = false
+  }
+}
 
-const currentStep = { step: 'contacts', title: 'Контакты' }
+const onCheckout = () => {
+  showForms.value = true
+}
 </script>
 
 <template>
   <div class="page">
     <div class="container">
-      <div v-if="!showFormScreen" class="basket">
-        <div class="basket__title">
-          <IconArrowLeft @click="goBack" />
-          Корзина ({{ cartLength }})
-        </div>
-        <div class="basket__list">
-          <div
-            v-for="item in displayedItems"
-            :key="item.uuid"
-            class="basket__list-item"
-          >
-            <B2BBasketItem
-              :item="item"
-              :api-url="API"
-              @delete="openDeletePopup(item.product.id, item.size)"
-            />
+      <template v-if="!isCartEmpty">
+        <div v-if="!showForms" class="basket">
+          <div class="basket__title">
+            <IconArrowLeft @click="goBack" />
+            Корзина ({{ cartLength }})
           </div>
-        </div>
+          <div class="basket__list">
+            <div
+              v-for="item in displayedItems"
+              :key="item.uuid"
+              class="basket__list-item"
+            >
+              <B2BBasketItem
+                :item="item"
+                :api-url="API"
+                @delete="openDeletePopup(item.product.id, item.size)"
+              />
+            </div>
+          </div>
 
-        <button
-          v-if="cartLength > 3"
-          class="show-all-button"
-          @click="toggleShowAll"
-        >
-          <span>{{ showAllItems ? 'Свернуть' : 'Развернуть' }}</span>
-          <IconArrowDown
-            class="arrow-icon"
-            :class="{ rotated: showAllItems }"
+          <button
+            v-if="cartLength > 3"
+            class="show-all-button"
+            @click="toggleShowAll"
+          >
+            <span>{{ showAllItems ? 'Свернуть' : 'Развернуть' }}</span>
+            <IconArrowDown
+              class="arrow-icon"
+              :class="{ rotated: showAllItems }"
+            />
+          </button>
+
+          <B2BBasketTotals
+            v-if="displayedItems.length"
+            :total-quantity="totalQuantity"
+            :total-weight="totalWeight"
+            :total-price="totalPrice"
+            @continue="onCheckout"
           />
-        </button>
-
-        <B2BBasketTotals
-          v-if="displayedItems.length"
-          :total-quantity="totalQuantity"
-          :total-weight="totalWeight"
-          :total-price="totalPrice"
-          @continue="showForm"
-        />
-      </div>
-
-      <div v-if="showFormScreen" class="form-screen">
-        <div class="form-header">
-          <IconArrowLeft @click="hideForm" />
-          <h2>Оформление заказа</h2>
         </div>
-        <div class="form-content">
-          <ContactsForm :steps="steps" :current-step="currentStep" />
-        </div>
-      </div>
 
-      <div v-if="showDeletePopup" class="popup-overlay">
-        <div class="popup">
-          <div class="popup-content">
-            <h3>Вы точно хотите удалить товар?</h3>
-            <p>Отменить данное действие будет невозможно.</p>
-            <div class="popup-buttons">
-              <Button color="gray" @click="closeDeletePopup">Отмена</Button>
-              <Button color="black" @click="confirmDelete"
-                >Удалить товар
+        <div v-if="showForms" class="form-screen">
+          <div class="stepper" v-if="!isMobile">
+            <h3 class="form-title">Оформление заказа</h3>
+            <div class="steps">
+              <div
+                v-for="step in steps"
+                :key="step.step"
+                class="steps-item"
+                :class="{ active: currentStep.step === step.step }"
+              >
+                <span @click="setStep(step)" class="steps-title">
+                  {{ step.title }}
+                </span>
+              </div>
+            </div>
+            <ContactsForm
+              v-if="currentStep.step === 'contacts'"
+              v-model:selected-address="selectedAddress"
+              @next="onNextStep"
+              :steps="steps"
+              :current-step="currentStep"
+            />
+            <B2BDeliveryForm
+              v-if="currentStep.step === 'delivery'"
+              :items="items"
+              :selected-address="selectedAddress"
+              @next="onNextStep"
+              :steps="steps"
+              :current-step="currentStep"
+            />
+            <div class="button-container">
+              <Button
+                v-if="currentStep.step !== 'delivery'"
+                variant="black"
+                size="small"
+                block
+                @click="onNextStep"
+              >
+                Продолжить
+              </Button>
+              <Button
+                class="button-prev"
+                size="small"
+                outline
+                @click="onPrevStep"
+              >
+                Назад
               </Button>
             </div>
           </div>
+
+          <template v-if="isMobile">
+            <ContactsForm
+              v-if="currentStep.step === 'contacts'"
+              v-model:selected-address="selectedAddress"
+              @next="onNextStep"
+              :steps="steps"
+              :current-step="currentStep"
+            />
+            <DeliveryForm
+              v-if="currentStep.step === 'delivery'"
+              :items="items"
+              :selected-address="selectedAddress"
+              @next="onNextStep"
+              :steps="steps"
+              :current-step="currentStep"
+            />
+            <div class="button-container">
+              <Button
+                v-if="currentStep.step !== 'delivery'"
+                variant="black"
+                size="small"
+                block
+                @click="onNextStep"
+              >
+                Продолжить
+              </Button>
+              <Button
+                class="button-prev"
+                size="small"
+                outline
+                @click="onPrevStep"
+              >
+                Назад
+              </Button>
+            </div>
+          </template>
         </div>
-      </div>
+
+        <Transition name="fade">
+          <div v-if="showDeletePopup" class="popup-overlay">
+            <div class="popup">
+              <div class="popup-content">
+                <h3>Вы точно хотите удалить товар?</h3>
+                <p>Отменить данное действие будет невозможно.</p>
+                <div class="popup-buttons">
+                  <Button color="gray" @click="closeDeletePopup">Отмена</Button>
+                  <Button color="black" @click="confirmDelete">
+                    Удалить товар
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Transition>
+      </template>
+      <template v-else>
+        <EmptyCart />
+      </template>
     </div>
   </div>
 </template>
@@ -242,30 +357,59 @@ const currentStep = { step: 'contacts', title: 'Контакты' }
     display: flex;
     flex-direction: column;
     gap: 24px;
+  }
 
-    .form-header {
+  .form-title {
+    margin-bottom: 32px;
+  }
+
+  .stepper {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .steps {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+
+    &-item {
       display: flex;
       align-items: center;
-      gap: 16px;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 155%;
+      color: var(--gray-400);
+      margin-right: 8px;
 
-      h2 {
-        font-size: 20px;
-        font-weight: 700;
-        margin: 0;
-      }
-
-      &:deep(svg) {
-        cursor: pointer;
-        width: 24px;
-        height: 24px;
+      &.active {
+        color: black;
       }
     }
 
-    .form-content {
-      padding: 24px;
-      background: white;
-      border-radius: 8px;
+    .steps-title {
+      white-space: nowrap;
+      cursor: pointer;
     }
+  }
+
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 48px;
+    gap: 16px;
+
+    button {
+      width: 261px;
+    }
+  }
+
+  .button-prev {
+    color: var(--gray);
+    border: 1px solid var(--gray);
   }
 
   .popup-overlay {
@@ -281,10 +425,9 @@ const currentStep = { step: 'contacts', title: 'Контакты' }
   }
 
   .popup {
-    min-width: 554px;
     background: white;
     border-radius: 16px;
-    padding: 56px 24px;
+    padding: 56px 117px;
   }
 
   .popup-content {
@@ -315,6 +458,12 @@ const currentStep = { step: 'contacts', title: 'Контакты' }
       font-size: 13px;
       min-width: 148px;
       font-weight: 700;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      width: 100vw;
     }
   }
 }
