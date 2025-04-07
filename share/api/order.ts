@@ -169,3 +169,46 @@ export const getBoxberryTariff = async (
     throw error
   }
 }
+
+export const postOrderB2B = async (orderData: {
+  name: string
+  surname: string
+  email: string
+  phone: string
+  comment: string
+  products: {
+    productId: number
+    quantity: number
+    size: string
+  }[]
+  paymentType: string
+  paymentTypeVariants: string
+  deliveryService: string
+  deliveryServiceVariants: string
+  deliveryType: string
+  address: string
+}) => {
+  const {
+    public: { API }
+  } = useRuntimeConfig()
+  const authStore = useAuthStore()
+  const token = authStore.accessToken
+
+  if (!token) {
+    throw new Error('Ошибка: пользователь не авторизован')
+  }
+
+  try {
+    const response = await axios.post(`${API}/api/order_b2_bs`, orderData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    console.log('Заказ успешно отправлен:', response.data)
+    return response.data
+  } catch (error) {
+    console.error('Ошибка при создании заказа B2B:', error)
+    throw error
+  }
+}

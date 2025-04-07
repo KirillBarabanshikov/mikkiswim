@@ -764,7 +764,7 @@ watch(selectedTariff, async (newTariff) => {
   </section>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 @use '/app/assets/scss/variables' as *;
 
 .delivery {

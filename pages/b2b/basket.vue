@@ -4,16 +4,15 @@ import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import type { Address } from '~/entities/address/model/Address'
+import B2BDeliveryForm from '~/features/B2BDeliveryForm/B2BDeliveryForm.vue'
 import ContactsForm from '~/features/ContactsForm/ContactsForm.vue'
-import DeliveryForm from '~/features/DeliveryForm/DeliveryForm.vue'
 import B2BBasketItem from '~/share/components/b2b-basket/B2BBasketItem/B2BBasketItem.vue'
 import B2BBasketTotals from '~/share/components/b2b-basket/B2BBasketTotals/B2BBasketTotals.vue'
-import { useCartStore } from '~/share/store/cartStore'
-import IconArrowLeft from '~/share/UI/Icons/IconArrowLeft.vue'
-import IconArrowDown from '~/share/UI/Icons/IconArrowDown.vue'
-import { DeviceSize, useSizeWindow } from '~/share/utils/useSizeWindow'
 import EmptyCart from '~/share/components/basket/EmptyCart/EmptyCart.vue'
-import B2BDeliveryForm from '~/features/B2BDeliveryForm/B2BDeliveryForm.vue'
+import { useCartStore } from '~/share/store/cartStore'
+import IconArrowDown from '~/share/UI/Icons/IconArrowDown.vue'
+import IconArrowLeft from '~/share/UI/Icons/IconArrowLeft.vue'
+import { DeviceSize, useSizeWindow } from '~/share/utils/useSizeWindow'
 
 const steps = ref([
   { step: 'contacts', title: '1. Контакты' },
@@ -229,7 +228,7 @@ const onCheckout = () => {
               :steps="steps"
               :current-step="currentStep"
             />
-            <DeliveryForm
+            <B2BDeliveryForm
               v-if="currentStep.step === 'delivery'"
               :items="items"
               :selected-address="selectedAddress"
@@ -353,10 +352,12 @@ const onCheckout = () => {
   }
 
   .form-screen {
+    max-width: 554px;
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 24px;
+    margin: 0 auto;
   }
 
   .form-title {
@@ -365,7 +366,6 @@ const onCheckout = () => {
 
   .stepper {
     display: flex;
-    justify-content: flex-start;
     flex-direction: column;
     align-items: center;
     width: 100%;
@@ -374,6 +374,7 @@ const onCheckout = () => {
   .steps {
     display: flex;
     align-items: center;
+    align-self: flex-start;
     margin-bottom: 24px;
 
     &-item {

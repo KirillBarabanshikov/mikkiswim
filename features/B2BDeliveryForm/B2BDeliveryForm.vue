@@ -34,14 +34,18 @@ const router = useRouter()
 const { deviceSize } = useSizeWindow()
 
 const deliveryOptions = ref([
-  { id: 1, title: 'Деловые Линии' },
-  { id: 2, title: 'Байкал Сервис' },
-  { id: 3, title: 'ЖелДорЭкспедиция' },
-  { id: 4, title: 'Яндекс Доставка' },
-  { id: 5, title: 'СДЭК' },
-  { id: 6, title: 'Почта России' },
-  { id: 7, title: 'Боксбери' },
-  { id: 8, title: 'Другой способ' }
+  { id: 1, src: '/img/B2B_page/DelovyeLinii.svg', title: 'Деловые Линии' },
+  { id: 2, src: '/img/B2B_page/BaikalServis.svg', title: 'Байкал Сервис' },
+  { id: 3, src: '/img/B2B_page/ZhelDorExp.svg', title: 'ЖелДорЭкспедиция' },
+  { id: 4, src: '/img/B2B_page/YandexDelivery.svg', title: 'Яндекс Доставка' },
+  { id: 5, src: '/img/B2B_page/Cdek.svg', title: 'СДЭК' },
+  { id: 6, src: '/img/B2B_page/PochtaRussia.svg', title: 'Почта России' },
+  { id: 7, src: '/img/B2B_page/Boxberry.svg', title: 'Боксбери' },
+  {
+    id: 8,
+    src: null,
+    title: '<b>Другой способ</b><p>Укажите способ доставки</p>'
+  }
 ])
 
 const selectedDelivery = ref<string | null>(null)
@@ -51,8 +55,9 @@ const showCommentInput = ref(false)
 const comment = ref('')
 
 const selectDelivery = (option: string) => {
-  selectedDelivery.value = option
-  if (option !== 'Другой способ') {
+  const cleanTitle = option.replace(/<b>(.*?)<\/b><p>.*<\/p>/, '$1')
+  selectedDelivery.value = cleanTitle
+  if (cleanTitle !== 'Другой способ') {
     customDelivery.value = ''
   }
 }
@@ -105,10 +110,20 @@ const onSubmit = () => {
           v-for="option in deliveryOptions"
           :key="option.id"
           class="delivery-option"
-          :class="{ selected: selectedDelivery === option.title }"
+          :class="{
+            selected:
+              selectedDelivery ===
+              option.title.replace(/<b>(.*?)<\/b><p>.*<\/p>/, '$1')
+          }"
           @click="selectDelivery(option.title)"
         >
-          {{ option.title }}
+          <img
+            v-if="option.src"
+            :src="option.src"
+            :alt="option.title"
+            class="delivery-image"
+          />
+          <div v-else class="custom-option" v-html="option.title"></div>
         </div>
         <input
           v-if="selectedDelivery === 'Другой способ'"
@@ -119,17 +134,17 @@ const onSubmit = () => {
       </div>
 
       <div class="delivery-checkboxes">
-        <label class="checkbox-label">
-          <input type="checkbox" v-model="isPersonalDataAgreed" />
-          Согласен на обработку моих персональных данных
-        </label>
-        <label
-          class="checkbox-label"
+        <Checkbox
+          name="personalData"
+          label="Я согласен на обработку моих персональных данных"
+          v-model="isPersonalDataAgreed"
+        />
+        <Checkbox
+          name="comment"
+          label="Комментарий к заказу"
+          :default-checked="showCommentInput"
           @click="showCommentInput = !showCommentInput"
-        >
-          <input type="checkbox" :checked="showCommentInput" />
-          Комментарий к заказу
-        </label>
+        />
         <input
           v-if="showCommentInput"
           v-model="comment"
@@ -140,8 +155,15 @@ const onSubmit = () => {
 
       <div class="delivery-contacts">
         <div class="contacts-text">
-          <p class="contacts-question">Возникли вопросы?</p>
-          <Button outline class="contacts-button" @click="goToContacts">
+          <b class="contacts-question">
+            Возникли вопросы по поводу доставки?
+            <span>Позвоните или напишите нам</span>
+          </b>
+          <Button
+            color="white-gray"
+            class="contacts-button"
+            @click="goToContacts"
+          >
             Контакты
           </Button>
         </div>
@@ -163,13 +185,16 @@ const onSubmit = () => {
   </section>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 @use '/app/assets/scss/variables' as *;
 
 .delivery {
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 24px;
 
   &.mobile-view {
@@ -195,18 +220,24 @@ const onSubmit = () => {
 
   &-options {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 32px;
+
+    .custom-delivery-input {
+      grid-column: 1 / -1;
+    }
   }
 
   &-option {
-    padding: 12px;
-    text-align: center;
-    border: 1px solid var(--gray-400);
+    padding: 9px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 14px;
+    height: 60px;
+    background-color: var(--gray-300);
 
     &:hover {
       border-color: var(--black);
@@ -214,8 +245,44 @@ const onSubmit = () => {
 
     &.selected {
       background: var(--green);
-      color: var(--white);
       border-color: var(--green);
+
+      .delivery-image {
+        filter: brightness(0) invert(1);
+      }
+
+      .custom-option {
+        color: var(--white);
+
+        b {
+          color: var(--white);
+        }
+
+        p {
+          color: var(--white);
+        }
+      }
+    }
+  }
+
+  &-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .custom-option {
+    text-align: center;
+    font-size: 14px;
+
+    b {
+      font-weight: 700;
+    }
+
+    p {
+      font-size: 12px;
+      margin: 4px 0 0 0;
+      color: var(--gray);
     }
   }
 
@@ -223,19 +290,6 @@ const onSubmit = () => {
     display: flex;
     flex-direction: column;
     gap: 16px;
-  }
-
-  .checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    cursor: pointer;
-
-    input[type='checkbox'] {
-      width: 16px;
-      height: 16px;
-    }
   }
 
   .custom-delivery-input,
@@ -262,31 +316,38 @@ const onSubmit = () => {
   }
 
   .contacts-text {
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
   }
 
   .contacts-question {
     font-weight: 700;
-    font-size: 16px;
+    font-size: 14px;
+    line-height: 155%;
+
+    span {
+      font-weight: 400;
+    }
   }
 
   .contacts-button {
     width: 214px;
-    margin: 0 auto;
-    color: var(--gray);
   }
 
   &-note {
+    text-align: left;
     font-size: 14px;
-    color: var(--gray);
+    line-height: 155%;
   }
 
   .submit-button {
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
+    margin-top: 16px;
+    align-self: center;
+    width: 261px;
+    margin-bottom: -32px;
   }
 
   .form-header {
@@ -326,16 +387,31 @@ const onSubmit = () => {
   @media (max-width: #{$md2 + px}) {
     &-options {
       grid-template-columns: repeat(2, 1fr);
+
+      .custom-delivery-input {
+        grid-column: 1 / -1;
+      }
     }
 
     &-content {
       width: 100%;
+    }
+
+    .contacts-text {
+      text-align: center;
+      width: 100%;
+      flex-direction: column;
+      gap: 4px;
     }
   }
 
   @media (max-width: #{$md3 + px}) {
     &-options {
       grid-template-columns: 1fr;
+
+      .custom-delivery-input {
+        grid-column: 1 / -1;
+      }
     }
   }
 }
