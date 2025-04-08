@@ -9,10 +9,12 @@ import Footer from '~/widgets/Footer/Footer.vue'
 import GlobalCatalog from '~/widgets/GlobalCatalog/GlobalCatalog.vue'
 import Header from '~/widgets/Header/Header.vue'
 import Search from '~/widgets/Search/Search.vue'
+import { useUserStore } from '~/share/store/userStore'
 
 const route = useRoute()
 const router = useRouter()
 const globalStore = useGlobalStore()
+const userStore = useUserStore()
 
 // Реактивная переменная для управления вариантом хедера
 const currentHeaderVariant = ref<string | undefined>(undefined)
@@ -102,23 +104,28 @@ watch(
   }
 )
 
-const isFooterVisible = computed(
-  () =>
-    ![
-      'index',
-      'cabinet',
-      'b2b',
-      'partnerRegistration',
-      'b2bRegistration',
-      'vacancies',
-      'partner-register',
-      'b2b-register',
-      'vacancies-list',
-      'new-password',
-      'b2b-catalog',
-      'b2b-basket'
-    ].includes(route.name as string)
-)
+const isFooterVisible = computed(() => {
+  const hiddenRoutes = [
+    'index',
+    'cabinet',
+    'b2b',
+    'partnerRegistration',
+    'b2bRegistration',
+    'vacancies',
+    'partner-register',
+    'b2b-register',
+    'vacancies-list',
+    'new-password',
+    'b2b-catalog',
+    'b2b-basket'
+  ]
+
+  if (route.name === 'contacts' && userStore.isB2BUser) {
+    return false
+  }
+
+  return !hiddenRoutes.includes(route.name as string)
+})
 
 watch(
   () => globalStore.isOpenAuthentication,

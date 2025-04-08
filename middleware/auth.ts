@@ -11,12 +11,15 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const isServer = !!event
 
   const publicB2BPages = ['/b2b', '/b2b-register']
+  const allowedB2BPages = ['/contacts'] // Добавляем /contacts как разрешенную для B2B
+
   if (publicB2BPages.includes(to.path)) {
     return
   }
 
   const requiresAuth = to.meta.requiresAuth === true
-  const isB2BPage = to.path.startsWith('/b2b')
+  const isB2BPage =
+    to.path.startsWith('/b2b') || allowedB2BPages.includes(to.path)
 
   // На сервере синхронизируем состояние аутентификации перед проверками
   if (isServer && refreshToken.value && !authStore.isAuthenticated) {
@@ -32,14 +35,13 @@ export default defineNuxtRouteMiddleware(async (to) => {
       }
     } else {
       console.error('Сервер: ошибка обновления токена:', refreshResult.error)
-      // Если токен не обновился и страница требует B2B-доступ, перенаправляем
       if (isB2BPage && !publicB2BPages.includes(to.path)) {
         return navigateTo('/b2b', { redirectCode: 302 })
       }
     }
   }
 
-  // Проверка доступа к B2B-страницам
+  // Проверка доступа к B2B-страницам (включая /contacts)
   if (isB2BPage && !publicB2BPages.includes(to.path)) {
     if (!authStore.isAuthenticated) {
       console.log('Неаутентифицированный доступ к B2B-странице:', to.path)
@@ -56,7 +58,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   // Проверка доступа B2B-пользователей к не-B2B страницам
   if (authStore.isAuthenticated && userStore.isB2BUser) {
-    if (!isB2BPage && to.path !== '/cabinet') {
+    if (
+      !isB2BPage &&
+      to.path !== '/cabinet' &&
+      !allowedB2BPages.includes(to.path)
+    ) {
       console.log(
         'B2B-пользователь пытается зайти на не-B2B страницу:',
         to.path
@@ -73,7 +79,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
       console.log('Сервер: refresh_token отсутствует, перенаправление на /b2b')
       return navigateTo('/b2b', { redirectCode: 302 })
     }
-    // Если refresh_token уже обработан выше, здесь ничего не делаем
   }
 
   // Клиентская логика
@@ -84,11 +89,15 @@ export default defineNuxtRouteMiddleware(async (to) => {
         if (!userStore.user?.id) {
           await userStore.fetchUser(apiUrl)
         }
-        // После обновления токена проверяем доступ
         if (isB2BPage && !userStore.isB2BUser) {
           return navigateTo('/')
         }
-        if (!isB2BPage && userStore.isB2BUser && to.path !== '/cabinet') {
+        if (
+          !isB2BPage &&
+          userStore.isB2BUser &&
+          to.path !== '/cabinet' &&
+          !allowedB2BPages.includes(to.path)
+        ) {
           return navigateTo('/b2b/catalog')
         }
       } else {
