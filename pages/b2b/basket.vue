@@ -13,6 +13,7 @@ import { useCartStore } from '~/share/store/cartStore'
 import IconArrowDown from '~/share/UI/Icons/IconArrowDown.vue'
 import IconArrowLeft from '~/share/UI/Icons/IconArrowLeft.vue'
 import { DeviceSize, useSizeWindow } from '~/share/utils/useSizeWindow'
+import { postOrderB2B } from '~/share/api/order'
 
 const steps = ref([
   { step: 'contacts', title: '1. Контакты' },
@@ -123,6 +124,52 @@ const onPrevStep = () => {
 const onCheckout = () => {
   showForms.value = true
 }
+
+const orderData = reactive({
+  name: '',
+  surname: '',
+  email: '',
+  phone: '',
+  comment: '',
+  address: '',
+  deliveryService: '',
+  products: [] as { productId: number; quantity: number; size: string }[],
+  paymentType: 'онлайн',
+  deliveryType: 'курьер'
+})
+
+const onContactsSubmit = (values) => {
+  orderData.name = values.name
+  orderData.surname = values.surname
+  orderData.email = values.email
+  orderData.phone = values.phone
+  orderData.address = selectedAddress?.value || ''
+}
+
+const onDeliverySubmit = (data) => {
+  orderData.deliveryService = data.deliveryService
+  orderData.comment = data.comment
+
+  orderData.products = items.map((item) => ({
+    productId: item.product.id,
+    quantity: item.quantity,
+    size: item.size
+  }))
+
+  submitOrder()
+}
+
+const submitOrder = async () => {
+  try {
+    const response = await postOrderB2B(orderData)
+    console.log('Заказ успешно отправлен:', response)
+    // await cartStore.clearCart() // Очищаем корзину после успешной отправки
+    // router.push('/order-success') // Перенаправляем на страницу успеха
+  } catch (error) {
+    console.error('Ошибка при отправке заказа:', error)
+    // Здесь можно добавить отображение ошибки пользователю
+  }
+}
 </script>
 
 <template>
@@ -187,6 +234,7 @@ const onCheckout = () => {
             <ContactsForm
               v-if="currentStep.step === 'contacts'"
               v-model:selected-address="selectedAddress"
+              @submit="onContactsSubmit"
               @next="onNextStep"
               :steps="steps"
               :current-step="currentStep"
@@ -195,6 +243,7 @@ const onCheckout = () => {
               v-if="currentStep.step === 'delivery'"
               :items="items"
               :selected-address="selectedAddress"
+              @submit="onDeliverySubmit"
               @next="onNextStep"
               :steps="steps"
               :current-step="currentStep"

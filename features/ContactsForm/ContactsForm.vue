@@ -7,7 +7,7 @@ import { useAddressSuggest } from '~/entities/address/api/query'
 import type { Address } from '~/entities/address/model/Address'
 import { DeviceSize, useSizeWindow } from '~/share/utils/useSizeWindow'
 
-const emit = defineEmits(['next', 'update:selectedAddress'])
+const emit = defineEmits(['next', 'update:selectedAddress', 'submit'])
 const { deviceSize } = useSizeWindow()
 
 const validationSchema = yup.object({
@@ -68,8 +68,8 @@ const selectAddress = (address: Address) => {
 }
 
 const onSubmit = handleSubmit((values) => {
-  console.log('Отправка формы', values)
-  emit('next')
+  emit('submit', values) // Передаем валидированные данные
+  emit('next') // Переходим к следующему шагу
 })
 
 watch(addressQuery, (newQuery) => {

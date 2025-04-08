@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 
 import type { Address } from '~/entities/address/model/Address'
 import { DeviceSize, useSizeWindow } from '~/share/utils/useSizeWindow'
+import TempCheckbox from '~/pages/b2b/tempCheckbox.vue'
 
 const props = defineProps<{
   items: {
@@ -28,7 +29,7 @@ const props = defineProps<{
   currentStep: { step: string; title: string }
 }>()
 
-const emit = defineEmits(['next'])
+const emit = defineEmits(['next', 'submit'])
 
 const router = useRouter()
 const { deviceSize } = useSizeWindow()
@@ -57,6 +58,7 @@ const comment = ref('')
 const selectDelivery = (option: string) => {
   const cleanTitle = option.replace(/<b>(.*?)<\/b><p>.*<\/p>/, '$1')
   selectedDelivery.value = cleanTitle
+  console.log('Selected delivery:', selectedDelivery.value)
   if (cleanTitle !== 'Другой способ') {
     customDelivery.value = ''
   }
@@ -68,17 +70,18 @@ const goToContacts = () => {
 
 const onSubmit = () => {
   if (!isPersonalDataAgreed.value) {
+    console.log('Согласие не получено')
     return
   }
-  console.log({
-    delivery:
+  const deliveryData = {
+    deliveryService:
       selectedDelivery.value === 'Другой способ'
         ? customDelivery.value
         : selectedDelivery.value,
-    comment: comment.value,
-    items: props.items,
-    address: props.selectedAddress
-  })
+    comment: comment.value
+  }
+  console.log('Submitting delivery data:', deliveryData)
+  emit('submit', deliveryData)
   emit('next')
 }
 </script>
@@ -134,10 +137,11 @@ const onSubmit = () => {
       </div>
 
       <div class="delivery-checkboxes">
-        <Checkbox
+        <tempCheckbox
           name="personalData"
           label="Я согласен на обработку моих персональных данных"
           v-model="isPersonalDataAgreed"
+          @change="console.log('Personal data agreed:', isPersonalDataAgreed)"
         />
         <Checkbox
           name="comment"
