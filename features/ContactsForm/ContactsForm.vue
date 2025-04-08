@@ -221,6 +221,7 @@ watch(addressQuery, (newQuery) => {
 
     &-item {
       display: flex;
+      flex-wrap: wrap;
       padding: 12px;
       border-radius: 16px;
       cursor: pointer;

@@ -182,9 +182,7 @@ export const postOrderB2B = async (orderData: {
     size: string
   }[]
   paymentType: string
-  paymentTypeVariants: string
   deliveryService: string
-  deliveryServiceVariants: string
   deliveryType: string
   address: string
 }) => {
