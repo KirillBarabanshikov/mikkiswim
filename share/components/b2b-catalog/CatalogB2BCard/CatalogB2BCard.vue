@@ -18,6 +18,7 @@ const props = defineProps<{
     catalogs: { id: number; title: string; slug: string }[]
     sizes: { id: number; title: string; quantity: number; active: boolean }[]
     weight: number | null
+    recommendedPrice: number | null
   }
 }>()
 
@@ -139,7 +140,7 @@ const goToCart = () => {
               </div>
               <div class="product-title">{{ product.title }}</div>
             </div>
-            <div class="rrc">3 900 ₽</div>
+            <div class="rrc">{{ product.recommendedPrice }}</div>
             <div class="stock">
               {{
                 product.sizes.find((s) => s.title === selectedSize)?.quantity ||

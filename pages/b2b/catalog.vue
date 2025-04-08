@@ -6,6 +6,9 @@ import { useRoute, useRouter } from 'vue-router'
 import { useProductsFilters } from '~/entities/product/api/query'
 import CatalogB2BCardList from '~/share/components/b2b-catalog/CatalogB2BCardList/CatalogB2BCardList.vue'
 import CatalogB2BHeader from '~/share/components/b2b-catalog/CatalogB2BHeader/CatalogB2BHeader.vue'
+import IconClose from '~/share/UI/Icons/IconClose.vue'
+import ToggleGroup from '~/share/UI/ToggleGroup/index.vue'
+import type { ToggleItem } from '~/share/UI/ToggleGroup/types'
 
 definePageMeta({
   middleware: ['auth'],
@@ -35,12 +38,46 @@ const filters = ref({
   limit: 20
 })
 
+const activeCatalogs = ref<ToggleItem | null>(null)
+const activeColors = ref<ToggleItem | null>(null)
+const activeSizes = ref<ToggleItem | null>(null)
+const minPrice = ref<number | null>(null)
+const maxPrice = ref<number | null>(null)
+
+const toggleCatalogs = computed<ToggleItem[]>(() => {
+  const items =
+    filtersData.value?.childCatalogs.map((category) => ({
+      id: category.id,
+      value: category.slug,
+      content: category.title
+    })) || []
+  return [{ id: 'all', value: '', content: 'Все типы' }, ...items]
+})
+
+const toggleColors = computed<ToggleItem[]>(() => {
+  const items =
+    filtersData.value?.colors.map((color) => ({
+      id: color.value,
+      value: color.value,
+      content: color.content
+    })) || []
+  return [{ id: 'all', value: '', content: 'Все цвета' }, ...items]
+})
+
+const toggleSizes = computed<ToggleItem[]>(() => {
+  const items =
+    filtersData.value?.sizes.map((size) => ({
+      id: size.value,
+      value: size.value,
+      content: size.content
+    })) || []
+  return [{ id: 'all', value: '', content: 'Все размеры' }, ...items]
+})
+
 const updatePage = (newPage: number) => {
   filters.value.page = newPage
   router.replace({ query: cleanFilters(filters.value) }).catch(console.error)
 }
-
-const pendingFilters = ref({ ...filters.value })
 
 const cleanFilters = (filtersObj: typeof filters.value) => {
   const cleaned = { ...filtersObj }
@@ -74,7 +111,11 @@ onMounted(() => {
     page: Number(route.query.page) || 1,
     limit: Number(route.query.limit) || 20
   }
-  pendingFilters.value = { ...filters.value }
+
+  if (filtersData.value) {
+    minPrice.value = filtersData.value.prices.min
+    maxPrice.value = filtersData.value.prices.max
+  }
 })
 
 const toggleIsOpenFilters = () => {
@@ -89,17 +130,61 @@ const updateSortBy = async (newValue: string) => {
 }
 
 const applyFilters = async () => {
-  Object.assign(filters.value, pendingFilters.value)
+  filters.value.catalog = activeCatalogs.value?.value || ''
+  filters.value.color = activeColors.value?.value || ''
+  filters.value.size = activeSizes.value?.value || ''
+  filters.value.priceStart = minPrice.value?.toString() || ''
+  filters.value.priceEnd = maxPrice.value?.toString() || ''
 
   router.replace({ query: cleanFilters(filters.value) }).catch(console.error)
-
   isOpenFilter.value = false
 }
 
 const resetFilters = () => {
-  pendingFilters.value = { ...filters.value }
+  activeCatalogs.value = toggleCatalogs.value[0] // "Все типы"
+  activeColors.value = toggleColors.value[0] // "Все цвета"
+  activeSizes.value = toggleSizes.value[0] // "Все размеры"
+  minPrice.value = filtersData.value?.prices.min || null
+  maxPrice.value = filtersData.value?.prices.max || null
+
+  filters.value.catalog = ''
+  filters.value.color = ''
+  filters.value.size = ''
+  filters.value.priceStart = ''
+  filters.value.priceEnd = ''
+
+  router.replace({ query: cleanFilters(filters.value) }).catch(console.error)
   isOpenFilter.value = false
 }
+
+watch(filtersData, (newFilters) => {
+  if (newFilters) {
+    minPrice.value = newFilters.prices.min
+    maxPrice.value = newFilters.prices.max
+
+    if (route.query.catalog)
+      activeCatalogs.value =
+        toggleCatalogs.value.find(
+          (item) => item.value === route.query.catalog
+        ) || toggleCatalogs.value[0]
+    else activeCatalogs.value = toggleCatalogs.value[0]
+
+    if (route.query.color)
+      activeColors.value =
+        toggleColors.value.find((item) => item.value === route.query.color) ||
+        toggleColors.value[0]
+    else activeColors.value = toggleColors.value[0]
+
+    if (route.query.size)
+      activeSizes.value =
+        toggleSizes.value.find((item) => item.value === route.query.size) ||
+        toggleSizes.value[0]
+    else activeSizes.value = toggleSizes.value[0]
+
+    if (route.query.priceStart) minPrice.value = Number(route.query.priceStart)
+    if (route.query.priceEnd) maxPrice.value = Number(route.query.priceEnd)
+  }
+})
 </script>
 
 <template>
@@ -118,59 +203,86 @@ const resetFilters = () => {
         @update:page="updatePage"
       />
 
-      <transition name="menu-top">
+      <transition name="menu-right">
         <div v-show="isOpenFilter" ref="filterMenuRef" class="filter-menu">
           <div class="filter-menu-content">
             <IconClose @click="toggleIsOpenFilters" />
             <div v-if="filtersData" class="filters-container">
-              <div class="filter-section" v-if="filtersData.colors">
-                <h3>Цвет</h3>
-                <select v-model="pendingFilters.color">
-                  <option value="">Все цвета</option>
-                  <option
-                    v-for="color in filtersData.colors"
-                    :key="color.value"
-                    :value="color.value"
-                  >
-                    {{ color.content }}
-                  </option>
-                </select>
-              </div>
-
-              <div class="filter-section" v-if="filtersData.sizes">
-                <h3>Размер</h3>
-                <select v-model="pendingFilters.size">
-                  <option value="">Все размеры</option>
-                  <option
-                    v-for="size in filtersData.sizes"
-                    :key="size.value"
-                    :value="size.value"
-                  >
-                    {{ size.content }}
-                  </option>
-                </select>
-              </div>
-
-              <div class="filter-section" v-if="filtersData.prices">
-                <h3>Цена</h3>
-                <input
-                  type="number"
-                  v-model="pendingFilters.priceStart"
-                  :min="filtersData.prices.min"
-                  :max="filtersData.prices.max"
-                  placeholder="От"
-                />
-                <input
-                  type="number"
-                  v-model="pendingFilters.priceEnd"
-                  :min="filtersData.prices.min"
-                  :max="filtersData.prices.max"
-                  placeholder="До"
+              <div v-if="filtersData.childCatalogs" class="filter-section">
+                <div class="filter-label">Тип</div>
+                <ToggleGroup
+                  v-model="activeCatalogs"
+                  :list="toggleCatalogs"
+                  type="single"
+                  variant="buttons"
+                  name="category-selection"
                 />
               </div>
 
-              <button @click="applyFilters">Применить</button>
-              <button @click="resetFilters">Отмена</button>
+              <div v-if="filtersData.colors" class="filter-section">
+                <div class="filter-label">Цвет</div>
+                <ToggleGroup
+                  v-model="activeColors"
+                  :list="toggleColors"
+                  type="single"
+                  variant="colors"
+                  name="colors-selection"
+                />
+              </div>
+
+              <div v-if="filtersData.sizes" class="filter-section">
+                <div class="filter-label">Размер</div>
+                <ToggleGroup
+                  v-model="activeSizes"
+                  :list="toggleSizes"
+                  type="single"
+                  variant="buttons"
+                  name="sizes-selection"
+                />
+              </div>
+
+              <div class="filter-section">
+                <div class="filter-label">
+                  Цена
+                  <span
+                    >от {{ filtersData.prices.min }}₽ до
+                    {{ filtersData.prices.max }}₽</span
+                  >
+                </div>
+                <div class="filter-price">
+                  <Input
+                    v-model.number="minPrice"
+                    type="number"
+                    placeholder="От"
+                    :min="filtersData.prices.min"
+                    :max="maxPrice"
+                    name="min"
+                  />
+                  <Input
+                    v-model.number="maxPrice"
+                    type="number"
+                    placeholder="До"
+                    :min="minPrice"
+                    :max="filtersData.prices.max"
+                    name="max"
+                  />
+                </div>
+              </div>
+
+              <div class="filter-actions">
+                <div class="filter-action">
+                  <Button @click="applyFilters">Применить</Button>
+                  <Button @click="toggleIsOpenFilters" variant="secondary"
+                    >Отмена
+                  </Button>
+                </div>
+                <Button
+                  color="white-gray"
+                  @click="resetFilters"
+                  variant="outline"
+                  >Сбросить
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -187,61 +299,73 @@ const resetFilters = () => {
   }
 
   .filter-menu {
-    width: 100%;
+    height: 100%;
+    max-width: 554px;
     position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
     z-index: 10;
-    height: auto;
     background: var(--white);
     box-shadow: 0 25px 25px 0 rgba(0, 0, 0, 0.1);
-    padding: 50px 100px;
+    padding: 25px 50px;
+  }
 
-    &-content {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
+  .filter-menu-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
 
-      svg {
-        cursor: pointer;
-        width: 20px;
-        position: absolute;
-        top: 20px;
-        right: 20px;
-      }
+    svg {
+      cursor: pointer;
+      width: 20px;
+      position: absolute;
+      top: 0;
+      right: 0;
     }
   }
 
   .filters-container {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 24px;
   }
 
   .filter-section {
     display: flex;
     flex-direction: column;
     gap: 10px;
+  }
 
-    h3 {
-      font-size: 16px;
-      font-weight: 600;
+  .filter-label {
+    font-weight: 700;
+    margin-bottom: 8px;
+
+    span {
+      font-weight: 400;
+    }
+  }
+
+  .filter-price {
+    display: flex;
+    gap: 12px;
+  }
+
+  .filter-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+
+    .filter-action {
+      display: flex;
+      gap: 18px;
     }
 
-    select,
-    input {
-      padding: 8px;
-      border: 1px solid var(--gray-400);
-      border-radius: 8px;
-      font-size: 14px;
-    }
-
-    input {
-      width: 100px;
+    button {
+      flex: 1;
     }
   }
 }
