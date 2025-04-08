@@ -195,9 +195,10 @@ const resetFilters = () => {
     height: auto;
     background: var(--white);
     box-shadow: 0 25px 25px 0 rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    padding: 50px 100px;
 
     &-content {
+      width: 100%;
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -217,10 +218,8 @@ const resetFilters = () => {
 
   .filters-container {
     width: 100%;
-    max-width: 400px;
     display: flex;
-    flex-direction: column;
-    gap: 20px;
+    justify-content: space-between;
   }
 
   .filter-section {
