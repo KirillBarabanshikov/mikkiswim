@@ -5,7 +5,7 @@ import { getAddressSuggestions } from '~/share/api/address'
 
 export const useAddressSuggest = (
   addressQuery: Ref<string>,
-  debounceTime = 7000
+  debounceTime = 700
 ) => {
   const debouncedQuery = ref(addressQuery.value)
   let timeoutId: ReturnType<typeof setTimeout>
