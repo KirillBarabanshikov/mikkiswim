@@ -38,10 +38,10 @@ const deliveryOptions = ref([
   { id: 1, src: '/img/B2B_page/DelovyeLinii.svg', title: 'Деловые Линии' },
   { id: 2, src: '/img/B2B_page/BaikalServis.svg', title: 'Байкал Сервис' },
   { id: 3, src: '/img/B2B_page/ZhelDorExp.svg', title: 'ЖелДорЭкспедиция' },
-  { id: 4, src: '/img/B2B_page/YandexDelivery.svg', title: 'Яндекс Доставка' },
-  { id: 5, src: '/img/B2B_page/Cdek.svg', title: 'СДЭК' },
+  { id: 4, src: '/img/B2B_page/YandexDelivery.svg', title: 'Яндекс доставка' },
+  { id: 5, src: '/img/B2B_page/Cdek.svg', title: 'Cdek' },
   { id: 6, src: '/img/B2B_page/PochtaRussia.svg', title: 'Почта России' },
-  { id: 7, src: '/img/B2B_page/Boxberry.svg', title: 'Боксбери' },
+  { id: 7, src: '/img/B2B_page/Boxberry.svg', title: 'Boxberry' },
   {
     id: 8,
     src: null,

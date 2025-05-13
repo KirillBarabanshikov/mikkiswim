@@ -150,7 +150,7 @@ const onDeliverySubmit = (data) => {
   orderData.deliveryService = data.deliveryService
   orderData.comment = data.comment
 
-  orderData.products = items.map((item) => ({
+  orderData.products = items.value.map((item) => ({
     productId: item.product.id,
     quantity: item.quantity,
     size: item.size
@@ -231,23 +231,27 @@ const submitOrder = async () => {
                 </span>
               </div>
             </div>
-            <ContactsForm
-              v-if="currentStep.step === 'contacts'"
-              v-model:selected-address="selectedAddress"
-              @submit="onContactsSubmit"
-              @next="onNextStep"
-              :steps="steps"
-              :current-step="currentStep"
-            />
-            <B2BDeliveryForm
-              v-if="currentStep.step === 'delivery'"
-              :items="items"
-              :selected-address="selectedAddress"
-              @submit="onDeliverySubmit"
-              @next="onNextStep"
-              :steps="steps"
-              :current-step="currentStep"
-            />
+            <keep-alive>
+              <div>
+                <ContactsForm
+                  v-show="currentStep.step === 'contacts'"
+                  v-model:selected-address="selectedAddress"
+                  @submit="onContactsSubmit"
+                  @next="onNextStep"
+                  :steps="steps"
+                  :current-step="currentStep"
+                />
+                <B2BDeliveryForm
+                  v-show="currentStep.step === 'delivery'"
+                  :items="items"
+                  :selected-address="selectedAddress"
+                  @submit="onDeliverySubmit"
+                  @next="onNextStep"
+                  :steps="steps"
+                  :current-step="currentStep"
+                />
+              </div>
+            </keep-alive>
             <div class="button-container">
               <Button
                 v-if="currentStep.step !== 'delivery'"
