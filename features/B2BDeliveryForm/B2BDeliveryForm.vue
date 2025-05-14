@@ -3,8 +3,8 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import type { Address } from '~/entities/address/model/Address'
-import { DeviceSize, useSizeWindow } from '~/share/utils/useSizeWindow'
 import TempCheckbox from '~/pages/b2b/tempCheckbox.vue'
+import { DeviceSize, useSizeWindow } from '~/share/utils/useSizeWindow'
 
 const props = defineProps<{
   items: {

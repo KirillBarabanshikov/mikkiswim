@@ -140,7 +140,7 @@ const goToCart = () => {
               </div>
               <div class="product-title">{{ product.title }}</div>
             </div>
-            <div class="rrc">{{ product.recommendedPrice }}</div>
+            <div class="rrc">{{ product.recommendedPrice }} ₽</div>
             <div class="stock">
               {{
                 product.sizes.find((s) => s.title === selectedSize)?.quantity ||

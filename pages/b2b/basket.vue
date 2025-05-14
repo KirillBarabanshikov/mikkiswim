@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import type { Address } from '~/entities/address/model/Address'
 import B2BDeliveryForm from '~/features/B2BDeliveryForm/B2BDeliveryForm.vue'
 import ContactsForm from '~/features/ContactsForm/ContactsForm.vue'
+import { postOrderB2B } from '~/share/api/order'
 import B2BBasketItem from '~/share/components/b2b-basket/B2BBasketItem/B2BBasketItem.vue'
 import B2BBasketTotals from '~/share/components/b2b-basket/B2BBasketTotals/B2BBasketTotals.vue'
 import EmptyCart from '~/share/components/basket/EmptyCart/EmptyCart.vue'
@@ -13,7 +14,6 @@ import { useCartStore } from '~/share/store/cartStore'
 import IconArrowDown from '~/share/UI/Icons/IconArrowDown.vue'
 import IconArrowLeft from '~/share/UI/Icons/IconArrowLeft.vue'
 import { DeviceSize, useSizeWindow } from '~/share/utils/useSizeWindow'
-import { postOrderB2B } from '~/share/api/order'
 
 const steps = ref([
   { step: 'contacts', title: '1. Контакты' },
@@ -32,6 +32,19 @@ const showForms = ref(false)
 const showAllItems = ref(false)
 const showDeletePopup = ref(false)
 const itemToDelete = ref<{ productId: number; size: string } | null>(null)
+
+const contactsFormRef = ref<InstanceType<typeof ContactsForm> | null>(null)
+
+watch(
+  contactsFormRef,
+  (newRef) => {
+    console.log(
+      'contactsFormRef changed:',
+      newRef ? 'Initialized' : 'Not initialized'
+    )
+  },
+  { immediate: true }
+)
 
 const cartStore = useCartStore()
 const { items } = storeToRefs(cartStore)
@@ -121,8 +134,14 @@ const onPrevStep = () => {
   }
 }
 
-const onCheckout = () => {
+const onCheckout = async () => {
   showForms.value = true
+  currentStep.value = steps.value[0]
+  console.log(
+    'onCheckout: showForms set to true, currentStep:',
+    currentStep.value
+  )
+  await nextTick()
 }
 
 const orderData = reactive({
@@ -139,35 +158,37 @@ const orderData = reactive({
 })
 
 const onContactsSubmit = (values) => {
-  orderData.name = values.name
-  orderData.surname = values.surname
-  orderData.email = values.email
-  orderData.phone = values.phone
-  orderData.address = selectedAddress?.value || ''
+  console.log('onContactsSubmit called with values:', values)
+  orderData.name = values.name || ''
+  orderData.surname = values.surname || ''
+  orderData.email = values.email || ''
+  orderData.phone = values.phone || ''
+  orderData.address = values.address || selectedAddress?.value || ''
+  console.log('Updated orderData:', orderData)
+  onNextStep()
 }
 
 const onDeliverySubmit = (data) => {
-  orderData.deliveryService = data.deliveryService
-  orderData.comment = data.comment
-
+  console.log('Delivery form data:', data)
+  orderData.deliveryService = data.deliveryService || ''
+  orderData.comment = data.comment || ''
   orderData.products = items.value.map((item) => ({
     productId: item.product.id,
     quantity: item.quantity,
     size: item.size
   }))
-
   submitOrder()
 }
 
 const submitOrder = async () => {
+  console.log('Order data before submitting:', orderData)
   try {
     const response = await postOrderB2B(orderData)
     console.log('Заказ успешно отправлен:', response)
-    // await cartStore.clearCart() // Очищаем корзину после успешной отправки
-    // router.push('/order-success') // Перенаправляем на страницу успеха
+    // await cartStore.clearCart();
+    // router.push('/order-success');
   } catch (error) {
     console.error('Ошибка при отправке заказа:', error)
-    // Здесь можно добавить отображение ошибки пользователю
   }
 }
 </script>

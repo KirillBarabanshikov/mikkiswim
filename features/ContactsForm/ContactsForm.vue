@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useField, useForm } from 'vee-validate'
-import { computed, ref } from 'vue'
+import { ref, watch } from 'vue'
 import * as yup from 'yup'
 
 import { useAddressSuggest } from '~/entities/address/api/query'
@@ -24,12 +24,13 @@ const validationSchema = yup.object({
   address: yup.string().required('Заполнить обязательно')
 })
 
-const { handleSubmit } = useForm({ validationSchema })
+const { handleSubmit, validate } = useForm({ validationSchema })
 
 const name = useField('name')
 const surname = useField('surname')
 const email = useField('email')
 const phone = useField('phone')
+const address = useField('address')
 
 const addressQuery = ref('')
 const showSuggestions = ref(false)
@@ -50,31 +51,61 @@ const props = defineProps({
 
 const highlightMatch = (address: string) => {
   if (!addressQuery.value) return address
-
   const words = addressQuery.value.trim().split(/\s+/).filter(Boolean)
-
   if (words.length === 0) return address
-
   const regex = new RegExp(`(${words.join('|')})`, 'gi')
-
   return address.replace(regex, '<span class="highlight">$1</span>')
 }
 
-const selectAddress = (address: Address) => {
-  selectedAddress.value = address
-  addressQuery.value = address.value
+const selectAddress = (addressData: Address) => {
+  selectedAddress.value = addressData
+  addressQuery.value = addressData.value
+  address.value.value = addressData.value // Синхронизируем с валидируемым полем
   showSuggestions.value = false
-  emit('update:selectedAddress', address)
+  emit('update:selectedAddress', addressData)
 }
 
 const onSubmit = handleSubmit((values) => {
-  emit('submit', values) // Передаем валидированные данные
-  emit('next') // Переходим к следующему шагу
+  console.log('Submitting contact form values:', values)
+  emit('submit', {
+    ...values,
+    address: selectedAddress?.value || values.address
+  })
+  emit('next')
 })
+
+const validateAndSubmit = async () => {
+  console.log('validateAndSubmit called in ContactsForm')
+  const { valid } = await validate()
+  console.log('Validation result:', valid)
+  if (valid) {
+    const values = {
+      name: name.value.value,
+      surname: surname.value.value,
+      email: email.value.value,
+      phone: phone.value.value,
+      address: selectedAddress?.value || address.value.value
+    }
+    console.log('Validated contact form values:', values)
+    emit('submit', values)
+    emit('next')
+  } else {
+    console.log('Form validation failed with errors:', {
+      name: name.errorMessage.value,
+      surname: surname.errorMessage.value,
+      email: email.errorMessage.value,
+      phone: phone.errorMessage.value,
+      address: address.errorMessage.value
+    })
+  }
+}
 
 watch(addressQuery, (newQuery) => {
   showSuggestions.value = newQuery.length >= 3
+  address.value.value = newQuery // Синхронизируем addressQuery с полем address
 })
+
+defineExpose({ validateAndSubmit })
 </script>
 
 <template>
@@ -147,6 +178,9 @@ watch(addressQuery, (newQuery) => {
         </ul>
       </div>
       <div class="form-text">* Обязательные к заполнению поля</div>
+      <Button type="submit" variant="black" size="small" block
+        >Продолжить</Button
+      >
     </form>
   </section>
 </template>
@@ -167,16 +201,19 @@ watch(addressQuery, (newQuery) => {
     color: var(--gray);
     margin-bottom: 16px;
   }
+
   .form-inputs {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
   }
+
   .form-text {
     font-size: 14px;
     margin-top: 36px;
     color: gray;
   }
+
   .address-input {
     grid-column: span 2;
     border: 1px solid var(--gray-400);
@@ -187,6 +224,7 @@ watch(addressQuery, (newQuery) => {
     align-items: center;
     width: 100%;
     transition: border-color 0.3s linear;
+
     &:hover {
       border-color: var(--black);
     }
@@ -227,6 +265,7 @@ watch(addressQuery, (newQuery) => {
       cursor: pointer;
       gap: 6px;
       color: var(--black);
+
       &:hover {
         background-color: var(--gray-300);
       }
@@ -281,6 +320,7 @@ watch(addressQuery, (newQuery) => {
 @media (max-width: #{$md2 + px}) {
   .contacts-form {
     padding: 16px;
+
     .form-inputs {
       grid-template-columns: repeat(1, 1fr);
       gap: 16px;
@@ -292,6 +332,7 @@ watch(addressQuery, (newQuery) => {
   .contacts-form {
     width: 100vw;
     padding: 16px;
+
     .form-inputs {
       grid-template-columns: repeat(1, 1fr);
       gap: 16px;
