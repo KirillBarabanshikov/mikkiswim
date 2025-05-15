@@ -66,43 +66,35 @@ const selectAddress = (addressData: Address) => {
 }
 
 const onSubmit = handleSubmit((values) => {
-  console.log('Submitting contact form values:', values)
   emit('submit', {
     ...values,
-    address: selectedAddress?.value || values.address
+    address: selectedAddress.value
+      ? selectedAddress.value.value
+      : values.address
   })
   emit('next')
 })
 
 const validateAndSubmit = async () => {
-  console.log('validateAndSubmit called in ContactsForm')
   const { valid } = await validate()
-  console.log('Validation result:', valid)
   if (valid) {
     const values = {
-      name: name.value.value,
-      surname: surname.value.value,
-      email: email.value.value,
-      phone: phone.value.value,
-      address: selectedAddress?.value || address.value.value
+      name: name.value,
+      surname: surname.value,
+      email: email.value,
+      phone: phone.value,
+      address: selectedAddress.value
+        ? selectedAddress.value.value
+        : address.value
     }
     console.log('Validated contact form values:', values)
     emit('submit', values)
-    emit('next')
-  } else {
-    console.log('Form validation failed with errors:', {
-      name: name.errorMessage.value,
-      surname: surname.errorMessage.value,
-      email: email.errorMessage.value,
-      phone: phone.errorMessage.value,
-      address: address.errorMessage.value
-    })
   }
 }
 
 watch(addressQuery, (newQuery) => {
   showSuggestions.value = newQuery.length >= 3
-  address.value.value = newQuery // Синхронизируем addressQuery с полем address
+  address.value.value = newQuery
 })
 
 defineExpose({ validateAndSubmit })
@@ -178,9 +170,9 @@ defineExpose({ validateAndSubmit })
         </ul>
       </div>
       <div class="form-text">* Обязательные к заполнению поля</div>
-      <Button type="submit" variant="black" size="small" block
-        >Продолжить</Button
-      >
+      <!--      <Button type="submit" variant="black" size="small" block-->
+      <!--        >Продолжить</Button-->
+      <!--      >-->
     </form>
   </section>
 </template>

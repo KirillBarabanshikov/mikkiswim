@@ -40,7 +40,7 @@ const deliveryOptions = ref([
   { id: 3, src: '/img/B2B_page/ZhelDorExp.svg', title: 'ЖелДорЭкспедиция' },
   { id: 4, src: '/img/B2B_page/YandexDelivery.svg', title: 'Яндекс доставка' },
   { id: 5, src: '/img/B2B_page/Cdek.svg', title: 'Cdek' },
-  { id: 6, src: '/img/B2B_page/PochtaRussia.svg', title: 'Почта России' },
+  { id: 6, src: '/img/B2B_page/pochta.svg', title: 'Почта России' },
   { id: 7, src: '/img/B2B_page/Boxberry.svg', title: 'Boxberry' },
   {
     id: 8,

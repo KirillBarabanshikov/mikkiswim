@@ -153,7 +153,7 @@ const orderData = reactive({
   address: '',
   deliveryService: '',
   products: [] as { productId: number; quantity: number; size: string }[],
-  paymentType: 'онлайн',
+  paymentType: 'Картой',
   deliveryType: 'курьер'
 })
 
@@ -163,7 +163,7 @@ const onContactsSubmit = (values) => {
   orderData.surname = values.surname || ''
   orderData.email = values.email || ''
   orderData.phone = values.phone || ''
-  orderData.address = values.address || selectedAddress?.value || ''
+  orderData.address = values.address || ''
   console.log('Updated orderData:', orderData)
   onNextStep()
 }
@@ -255,10 +255,10 @@ const submitOrder = async () => {
             <keep-alive>
               <div>
                 <ContactsForm
+                  ref="contactsFormRef"
                   v-show="currentStep.step === 'contacts'"
                   v-model:selected-address="selectedAddress"
                   @submit="onContactsSubmit"
-                  @next="onNextStep"
                   :steps="steps"
                   :current-step="currentStep"
                 />
@@ -279,7 +279,7 @@ const submitOrder = async () => {
                 variant="black"
                 size="small"
                 block
-                @click="onNextStep"
+                @click="contactsFormRef?.validateAndSubmit"
               >
                 Продолжить
               </Button>
@@ -296,9 +296,10 @@ const submitOrder = async () => {
 
           <template v-if="isMobile">
             <ContactsForm
+              ref="contactsFormRef"
               v-if="currentStep.step === 'contacts'"
               v-model:selected-address="selectedAddress"
-              @next="onNextStep"
+              @submit="onContactsSubmit"
               :steps="steps"
               :current-step="currentStep"
             />
@@ -316,7 +317,7 @@ const submitOrder = async () => {
                 variant="black"
                 size="small"
                 block
-                @click="onNextStep"
+                @click="contactsFormRef?.validateAndSubmit"
               >
                 Продолжить
               </Button>
