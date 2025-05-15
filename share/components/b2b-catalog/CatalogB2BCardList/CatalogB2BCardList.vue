@@ -47,11 +47,14 @@ const updateSize = (productId: number, size: string) => {
 const emit = defineEmits<{
   (e: 'update:page', page: number): void
 }>()
+
+const { width } = useWindowSize()
+const isMobile = computed(() => width.value <= 768)
 </script>
 
 <template>
   <div class="card-list">
-    <div class="card-header">
+    <div v-if="!isMobile" class="card-header">
       <div class="item">Фото</div>
       <div class="item">Название / Цена</div>
       <div class="item">РРЦ</div>
@@ -92,6 +95,8 @@ const emit = defineEmits<{
 </template>
 
 <style scoped lang="scss">
+@use '/app/assets/scss/variables' as *;
+
 .card-header {
   margin: 24px 0;
   display: flex;
@@ -173,5 +178,36 @@ const emit = defineEmits<{
   text-align: center;
   padding: 20px;
   color: #666;
+}
+
+@media (max-width: $md2 + 'px') {
+  .item:nth-child(1) {
+    flex: 0 0 96px !important;
+  }
+
+  .item:nth-child(2) {
+    flex: 0 0 224px !important;
+  }
+
+  .item:nth-child(3) {
+    margin-right: -32px;
+    flex: 0 0 67.5px !important;
+  }
+
+  .item:nth-child(4) {
+    flex: 0 0 89px !important;
+    text-align: center;
+  }
+
+  .item:nth-child(5) {
+    margin-left: -32px;
+    flex: 0 0 67.5px !important;
+    text-align: right;
+  }
+
+  .item:nth-child(6) {
+    flex: 0 0 96px !important;
+    text-align: right;
+  }
 }
 </style>

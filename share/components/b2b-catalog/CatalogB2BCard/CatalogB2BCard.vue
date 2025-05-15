@@ -117,6 +117,9 @@ const goToCart = () => {
   addToCart()
   navigateTo('/b2b/basket')
 }
+
+const { width } = useWindowSize()
+const isMobile = computed(() => width.value <= 768)
 </script>
 
 <template>
@@ -140,14 +143,16 @@ const goToCart = () => {
               </div>
               <div class="product-title">{{ product.title }}</div>
             </div>
-            <div class="rrc">{{ product.recommendedPrice }} ₽</div>
-            <div class="stock">
+            <div v-if="!isMobile" class="rrc">
+              {{ product.recommendedPrice }} ₽
+            </div>
+            <div v-if="!isMobile" class="stock">
               {{
                 product.sizes.find((s) => s.title === selectedSize)?.quantity ||
                 0
               }}
             </div>
-            <div class="weight">
+            <div v-if="!isMobile" class="weight">
               {{ product.weight ? `${product.weight} гр.` : 'Не указан' }}
             </div>
             <SelectSize v-model="selectedSize" :options="product.sizes" />
@@ -161,7 +166,7 @@ const goToCart = () => {
               <div class="label">B2B</div>
               {{ product.price }} ₽
             </div>
-            <div class="counter">
+            <div v-if="!isMobile" class="counter">
               <Button
                 class="gray decrement"
                 :disabled="counter === 1"
@@ -205,7 +210,9 @@ const goToCart = () => {
   </client-only>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use '/app/assets/scss/variables' as *;
+
 .product-wrapper {
   display: flex;
   flex-direction: row;
@@ -214,10 +221,6 @@ const goToCart = () => {
 }
 
 .product-card {
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  gap: 32px;
   padding-block: 0 32px;
   border-bottom: 1px solid var(--gray-100);
 
@@ -374,5 +377,75 @@ const goToCart = () => {
   opacity: 1;
   transform: translateY(0);
   max-height: 150px;
+}
+
+@media (max-width: $md2 + 'px') {
+  .label {
+    font-size: 12px;
+  }
+
+  .product-image {
+    flex: 0 0 96px;
+    width: 96px;
+    height: 126px;
+    object-fit: cover;
+  }
+
+  .catalog-name {
+    font-size: 12px;
+  }
+
+  .title-block {
+    flex: 0 0 224px !important;
+  }
+
+  .rrc {
+    flex: 0 0 66.5px !important;
+  }
+
+  .stock {
+    width: 27px !important;
+  }
+
+  .custom-select {
+    min-width: 96px !important;
+  }
+
+  .decrement,
+  .increment {
+    min-width: 80px !important;
+  }
+
+  .price {
+    flex: 0 0 96px !important;
+  }
+
+  .value {
+    padding: 12px 21px !important;
+    min-width: 64px !important;
+  }
+
+  .cart {
+    min-width: 96px !important;
+  }
+}
+
+@media (max-width: $md2 + 'px') {
+  .product-title {
+    font-size: 13px !important;
+  }
+
+  .price {
+    font-size: 13px !important;
+  }
+
+  .label {
+    font-size: 10px !important;
+  }
+
+  .product-info {
+    gap: 16px;
+    flex: 0;
+  }
 }
 </style>
