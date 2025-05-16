@@ -76,6 +76,8 @@ const selectSort = (value: string) => {
 </template>
 
 <style scoped lang="scss">
+@use '/app/assets/scss/variables' as *;
+
 .catalog-sort-by {
   position: relative;
 }
@@ -129,6 +131,12 @@ const selectSort = (value: string) => {
         font-weight: 600;
       }
     }
+  }
+}
+
+@media (max-width: $md3 + 'px') {
+  .sort-button {
+    font-size: 13px;
   }
 }
 </style>

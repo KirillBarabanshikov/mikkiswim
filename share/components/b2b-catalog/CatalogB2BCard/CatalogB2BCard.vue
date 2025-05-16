@@ -191,7 +191,53 @@ const isMobile = computed(() => width.value <= 768)
       </div>
       <transition name="slide">
         <div v-if="isActionsVisible" class="actions-row">
-          <Button class="white-gray cancel" @click="cancelActions">
+          <div class="action-container" v-if="isMobile">
+            <p>Остаток:</p>
+            <div v-if="isMobile" class="weight">
+              {{ product.weight ? `${product.weight} гр.` : 'Не указан' }}
+            </div>
+          </div>
+          <div class="action-container" v-if="isMobile">
+            <p>Вес, гр.</p>
+            <div v-if="isMobile" class="stock">
+              {{
+                product.sizes.find((s) => s.title === selectedSize)?.quantity ||
+                0
+              }}
+            </div>
+          </div>
+          <div class="action-container" v-if="isMobile">
+            <p>РРЦ, ₽</p>
+            <div v-if="isMobile" class="rrc">
+              {{ product.recommendedPrice }} ₽
+            </div>
+          </div>
+
+          <div class="action-counter" v-if="isMobile">
+            <p>Количество</p>
+            <div v-if="isMobile" class="mobile-counter">
+              <Button
+                class="gray decrement"
+                :disabled="counter === 1"
+                @click="decrement"
+              >
+                <IconMinus />
+              </Button>
+              <div class="value">{{ counter }}</div>
+              <Button
+                class="gray increment"
+                :disabled="counter >= maxQuantity"
+                @click="increment"
+              >
+                <IconPlus />
+              </Button>
+            </div>
+          </div>
+          <Button
+            v-if="!isMobile"
+            class="white-gray cancel"
+            @click="cancelActions"
+          >
             Отмена
           </Button>
           <Button class="white-gray collapse" @click="collapseActions">
@@ -270,6 +316,7 @@ const isMobile = computed(() => width.value <= 768)
 }
 
 .actions-row {
+  margin-top: 32px;
   display: flex;
   justify-content: space-between;
   flex: 1;
@@ -428,15 +475,41 @@ const isMobile = computed(() => width.value <= 768)
   .cart {
     min-width: 96px !important;
   }
+
+  .actions-row {
+    gap: 24px;
+  }
 }
 
-@media (max-width: $md2 + 'px') {
+@media (max-width: $md3 + 'px') {
   .product-title {
     font-size: 13px !important;
   }
 
+  .title-block {
+    flex: 0 !important;
+  }
+
+  .row {
+    justify-content: space-between;
+    gap: 8px;
+  }
+
   .price {
+    text-wrap: nowrap;
+    flex: 0 !important;
     font-size: 13px !important;
+  }
+
+  .product-card {
+    padding: 0;
+    border: none;
+  }
+
+  .product-image {
+    width: 76px;
+    height: 100px;
+    flex: 0 !important;
   }
 
   .label {
@@ -445,7 +518,79 @@ const isMobile = computed(() => width.value <= 768)
 
   .product-info {
     gap: 16px;
-    flex: 0;
+    flex: 1 !important;
+  }
+
+  .actions-row {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .rrc,
+  .stock,
+  .weight {
+    font-size: 13px;
+    color: var(--gray);
+    flex: 0 !important;
+    text-wrap: nowrap;
+  }
+
+  .action-container {
+    display: flex;
+    justify-content: space-between;
+
+    p {
+      font-size: 13px;
+      color: var(--gray);
+    }
+  }
+
+  .action-counter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    p {
+      font-size: 13px;
+      color: #303030;
+    }
+
+    button {
+      min-width: 64px !important;
+      max-width: 64px !important;
+      min-height: 32px !important;
+      max-height: 32px !important;
+      border-radius: 22px;
+      padding: 10px;
+      width: 64px;
+      height: 32px;
+
+      svg {
+        width: 14px !important;
+        height: 2px !important;
+      }
+    }
+
+    .value {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #f4f4f4;
+      border-radius: 16px;
+      width: 56px;
+      height: 32px;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 155%;
+      text-align: center;
+      color: #303030;
+    }
+  }
+
+  .mobile-counter {
+    display: flex;
+    gap: 9px;
   }
 }
 </style>

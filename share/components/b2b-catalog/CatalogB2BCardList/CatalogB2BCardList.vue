@@ -210,4 +210,10 @@ const isMobile = computed(() => width.value <= 768)
     text-align: right;
   }
 }
+
+@media (max-width: $md3 + 'px') {
+  .products-list {
+    align-items: center !important;
+  }
+}
 </style>
