@@ -1,12 +1,11 @@
 import { useQuery } from '@tanstack/vue-query'
+import axios from 'axios'
 
 import type { ProductCombination } from '~/entities/product-combination/model/ProductCombination'
 import {
   getProductCombination,
   getProductCombinations
 } from '~/share/api/productCombinations'
-import type { Product } from '~/entities/product/model/Product'
-import axios from 'axios'
 
 export const useProductCombinations = () => {
   const {

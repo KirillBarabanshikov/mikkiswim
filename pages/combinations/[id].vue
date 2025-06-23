@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
 import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 import { useProductCombination } from '~/entities/product-combination/api/query'
 import { addCombinationToCart } from '~/share/api/cart'
 import SizeHelpButton from '~/share/components/combinations/SizeHelpButton.vue'
-import { useFormatPrice } from '~/share/utils/useFormatPrice'
-import { useGlobalStore } from '~/share/store/globalStore'
 import { useAuthStore } from '~/share/store/authStore'
+import { useGlobalStore } from '~/share/store/globalStore'
+import { useFormatPrice } from '~/share/utils/useFormatPrice'
 
 definePageMeta({
   middleware: ['auth'],
@@ -26,16 +26,13 @@ const authStore = useAuthStore()
 
 const { data: combination, isPending } = useProductCombination(combinationId)
 
-// Храним выбранные размеры
 const selectedSizes = ref<Record<number, string>>({})
 
-// Устанавливаем значения по умолчанию для размеров
 const initializeDefaultSizes = () => {
-  if (combination.value?.combinationsProducts) {
+  if (combination.value?.combinationProducts) {
     const defaultSizes: Record<number, string> = {}
-    combination.value.combinationsProducts.forEach((cp) => {
+    combination.value.combinationProducts.forEach((cp) => {
       if (cp.product.sizes?.length) {
-        // Берем первый доступный размер как значение по умолчанию
         defaultSizes[cp.product.id] = cp.product.sizes[0].title
       }
     })
@@ -43,7 +40,6 @@ const initializeDefaultSizes = () => {
   }
 }
 
-// Инициализируем размеры при загрузке комбинации
 watch(
   () => combination.value,
   (newCombination) => {
@@ -65,7 +61,7 @@ const addToCart = async () => {
       return
     }
 
-    const productsWithSizes = combination.value?.combinationsProducts.filter(
+    const productsWithSizes = combination.value?.combinationProducts.filter(
       (cp) => cp.product.sizes?.length
     )
 
@@ -97,7 +93,7 @@ const addToCart = async () => {
         <div v-if="combination" class="combination-details">
           <div class="combination-products">
             <div
-              v-for="cp in combination.combinationsProducts"
+              v-for="cp in combination.combinationProducts"
               :key="cp.id"
               class="product-item"
             >

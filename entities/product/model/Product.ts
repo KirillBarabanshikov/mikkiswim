@@ -1,5 +1,5 @@
 import type { Catalog } from '~/entities/catalog/model/Catalog'
-import type { BadgeVariant } from '~/share/UI/Badge'
+import type { BadgeVariant } from '~/share/UI/Badge/Badge.vue'
 
 export interface ProductTag {
   color: BadgeVariant

@@ -2,12 +2,12 @@
 import { defineProps } from 'vue'
 import { useRoute } from 'vue-router'
 
+import { addViewToCombination } from '~/entities/product-combination/api/query'
 import type { ProductCombination } from '~/entities/product-combination/model/ProductCombination'
 import { useFormatPrice } from '~/share/utils/useFormatPrice'
 
 import IconFavorite from '../../UI/Icons/IconFavorite.vue'
 import IconPlus from '../../UI/Icons/IconPlus.vue'
-import { addViewToCombination } from '~/entities/product-combination/api/query'
 
 const config = useRuntimeConfig()
 const API = config.public.API
@@ -28,16 +28,16 @@ const onClickCombination = (e: MouseEvent) => {
 }
 
 const totalPrice = computed(() => {
-  if (!props.combination?.combinationsProducts?.length) return 0
-  return props.combination.combinationsProducts.reduce(
+  if (!props.combination?.combinationProducts?.length) return 0
+  return props.combination.combinationProducts.reduce(
     (sum, cp) => sum + (cp.product.price - (cp.discount || 0)),
     0
   )
 })
 
 const totalOldPrice = computed(() => {
-  if (!props.combination?.combinationsProducts?.length) return 0
-  return props.combination.combinationsProducts.reduce(
+  if (!props.combination?.combinationProducts?.length) return 0
+  return props.combination.combinationProducts.reduce(
     (sum, cp) => sum + cp.product.oldPrice,
     0
   )
@@ -49,7 +49,7 @@ const totalOldPrice = computed(() => {
     <div class="combination-body">
       <div class="combination-products">
         <div
-          v-for="(cp, index) in combination.combinationsProducts"
+          v-for="(cp, index) in combination.combinationProducts"
           :key="cp.id"
           class="product-item"
         >
@@ -67,7 +67,7 @@ const totalOldPrice = computed(() => {
             </div>
           </div>
           <div
-            v-if="index < combination.combinationsProducts.length - 1"
+            v-if="index < combination.combinationProducts.length - 1"
             class="plus-icon"
           >
             <IconPlus />
